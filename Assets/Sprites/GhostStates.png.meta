@@ -34,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 1
+    filterMode: 0
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -71,7 +71,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 2
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -109,12 +109,12 @@ TextureImporter:
       name: GhostStates_0
       rect:
         serializedVersion: 2
-        x: 5
-        y: 200
-        width: 20
-        height: 15
+        x: 0
+        y: 192
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -130,12 +130,12 @@ TextureImporter:
       name: GhostStates_1
       rect:
         serializedVersion: 2
-        x: 37
-        y: 198
-        width: 20
-        height: 17
+        x: 32
+        y: 192
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -151,12 +151,12 @@ TextureImporter:
       name: GhostStates_2
       rect:
         serializedVersion: 2
-        x: 69
-        y: 196
-        width: 20
-        height: 19
+        x: 64
+        y: 192
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -172,12 +172,12 @@ TextureImporter:
       name: GhostStates_3
       rect:
         serializedVersion: 2
-        x: 101
-        y: 200
-        width: 20
-        height: 15
+        x: 96
+        y: 192
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -193,12 +193,12 @@ TextureImporter:
       name: GhostStates_4
       rect:
         serializedVersion: 2
-        x: 133
-        y: 198
-        width: 20
-        height: 17
+        x: 128
+        y: 192
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -214,12 +214,12 @@ TextureImporter:
       name: GhostStates_5
       rect:
         serializedVersion: 2
-        x: 165
-        y: 196
-        width: 20
-        height: 19
+        x: 160
+        y: 192
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -235,12 +235,12 @@ TextureImporter:
       name: GhostStates_6
       rect:
         serializedVersion: 2
-        x: 5
-        y: 168
-        width: 20
-        height: 15
+        x: 0
+        y: 160
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -256,12 +256,12 @@ TextureImporter:
       name: GhostStates_7
       rect:
         serializedVersion: 2
-        x: 37
-        y: 166
-        width: 20
-        height: 17
+        x: 32
+        y: 160
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -277,12 +277,12 @@ TextureImporter:
       name: GhostStates_8
       rect:
         serializedVersion: 2
-        x: 69
-        y: 164
-        width: 20
-        height: 19
+        x: 64
+        y: 160
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -298,12 +298,12 @@ TextureImporter:
       name: GhostStates_9
       rect:
         serializedVersion: 2
-        x: 101
-        y: 168
-        width: 20
-        height: 15
+        x: 96
+        y: 160
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -319,12 +319,12 @@ TextureImporter:
       name: GhostStates_10
       rect:
         serializedVersion: 2
-        x: 133
-        y: 166
-        width: 20
-        height: 17
+        x: 128
+        y: 160
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -340,12 +340,12 @@ TextureImporter:
       name: GhostStates_11
       rect:
         serializedVersion: 2
-        x: 165
-        y: 164
-        width: 20
-        height: 19
+        x: 160
+        y: 160
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -361,12 +361,12 @@ TextureImporter:
       name: GhostStates_12
       rect:
         serializedVersion: 2
-        x: 5
-        y: 136
-        width: 20
-        height: 15
+        x: 0
+        y: 128
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -382,12 +382,12 @@ TextureImporter:
       name: GhostStates_13
       rect:
         serializedVersion: 2
-        x: 37
-        y: 134
-        width: 20
-        height: 17
+        x: 32
+        y: 128
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -403,12 +403,12 @@ TextureImporter:
       name: GhostStates_14
       rect:
         serializedVersion: 2
-        x: 69
-        y: 132
-        width: 20
-        height: 19
+        x: 64
+        y: 128
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -424,12 +424,12 @@ TextureImporter:
       name: GhostStates_15
       rect:
         serializedVersion: 2
-        x: 101
-        y: 136
-        width: 20
-        height: 15
+        x: 96
+        y: 128
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -445,12 +445,12 @@ TextureImporter:
       name: GhostStates_16
       rect:
         serializedVersion: 2
-        x: 133
-        y: 134
-        width: 20
-        height: 17
+        x: 128
+        y: 128
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -466,12 +466,12 @@ TextureImporter:
       name: GhostStates_17
       rect:
         serializedVersion: 2
-        x: 165
-        y: 132
-        width: 20
-        height: 19
+        x: 160
+        y: 128
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -487,12 +487,12 @@ TextureImporter:
       name: GhostStates_18
       rect:
         serializedVersion: 2
-        x: 5
-        y: 104
-        width: 20
-        height: 15
+        x: 0
+        y: 96
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -508,12 +508,12 @@ TextureImporter:
       name: GhostStates_19
       rect:
         serializedVersion: 2
-        x: 37
-        y: 102
-        width: 20
-        height: 17
+        x: 32
+        y: 96
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -529,12 +529,12 @@ TextureImporter:
       name: GhostStates_20
       rect:
         serializedVersion: 2
-        x: 69
-        y: 100
-        width: 20
-        height: 19
+        x: 64
+        y: 96
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -550,12 +550,12 @@ TextureImporter:
       name: GhostStates_21
       rect:
         serializedVersion: 2
-        x: 101
-        y: 104
-        width: 20
-        height: 15
+        x: 96
+        y: 96
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -571,12 +571,12 @@ TextureImporter:
       name: GhostStates_22
       rect:
         serializedVersion: 2
-        x: 133
-        y: 102
-        width: 20
-        height: 17
+        x: 128
+        y: 96
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -592,12 +592,12 @@ TextureImporter:
       name: GhostStates_23
       rect:
         serializedVersion: 2
-        x: 165
-        y: 100
-        width: 20
-        height: 19
+        x: 160
+        y: 96
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -613,12 +613,12 @@ TextureImporter:
       name: GhostStates_24
       rect:
         serializedVersion: 2
-        x: 5
-        y: 72
-        width: 20
-        height: 15
+        x: 0
+        y: 64
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -634,12 +634,12 @@ TextureImporter:
       name: GhostStates_25
       rect:
         serializedVersion: 2
-        x: 37
-        y: 70
-        width: 20
-        height: 17
+        x: 32
+        y: 64
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -655,12 +655,12 @@ TextureImporter:
       name: GhostStates_26
       rect:
         serializedVersion: 2
-        x: 69
-        y: 68
-        width: 20
-        height: 19
+        x: 64
+        y: 64
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -676,12 +676,12 @@ TextureImporter:
       name: GhostStates_27
       rect:
         serializedVersion: 2
-        x: 101
-        y: 72
-        width: 20
-        height: 15
+        x: 96
+        y: 64
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -697,12 +697,12 @@ TextureImporter:
       name: GhostStates_28
       rect:
         serializedVersion: 2
-        x: 133
-        y: 70
-        width: 20
-        height: 17
+        x: 128
+        y: 64
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -718,12 +718,12 @@ TextureImporter:
       name: GhostStates_29
       rect:
         serializedVersion: 2
-        x: 165
-        y: 68
-        width: 20
-        height: 19
+        x: 160
+        y: 64
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -739,12 +739,12 @@ TextureImporter:
       name: GhostStates_30
       rect:
         serializedVersion: 2
-        x: 5
-        y: 40
-        width: 20
-        height: 15
+        x: 0
+        y: 32
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -760,12 +760,12 @@ TextureImporter:
       name: GhostStates_31
       rect:
         serializedVersion: 2
-        x: 37
-        y: 38
-        width: 20
-        height: 17
+        x: 32
+        y: 32
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -781,12 +781,12 @@ TextureImporter:
       name: GhostStates_32
       rect:
         serializedVersion: 2
-        x: 69
-        y: 36
-        width: 20
-        height: 19
+        x: 64
+        y: 32
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -802,12 +802,12 @@ TextureImporter:
       name: GhostStates_33
       rect:
         serializedVersion: 2
-        x: 101
-        y: 40
-        width: 20
-        height: 15
+        x: 96
+        y: 32
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -823,12 +823,12 @@ TextureImporter:
       name: GhostStates_34
       rect:
         serializedVersion: 2
-        x: 133
-        y: 38
-        width: 20
-        height: 17
+        x: 128
+        y: 32
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -844,12 +844,12 @@ TextureImporter:
       name: GhostStates_35
       rect:
         serializedVersion: 2
-        x: 165
-        y: 36
-        width: 20
-        height: 19
+        x: 160
+        y: 32
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -865,12 +865,12 @@ TextureImporter:
       name: GhostStates_36
       rect:
         serializedVersion: 2
-        x: 5
-        y: 8
-        width: 20
-        height: 15
+        x: 0
+        y: 0
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -886,12 +886,12 @@ TextureImporter:
       name: GhostStates_37
       rect:
         serializedVersion: 2
-        x: 37
-        y: 6
-        width: 20
-        height: 17
+        x: 32
+        y: 0
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -907,12 +907,12 @@ TextureImporter:
       name: GhostStates_38
       rect:
         serializedVersion: 2
-        x: 69
-        y: 4
-        width: 20
-        height: 19
+        x: 64
+        y: 0
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
@@ -928,12 +928,12 @@ TextureImporter:
       name: GhostStates_39
       rect:
         serializedVersion: 2
-        x: 105
-        y: 12
-        width: 12
-        height: 11
+        x: 96
+        y: 0
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
