@@ -169,6 +169,7 @@ GameObject:
   m_Component:
   - component: {fileID: 289957449}
   - component: {fileID: 289957448}
+  - component: {fileID: 289957450}
   m_Layer: 0
   m_Name: PurpleGhost
   m_TagString: Untagged
@@ -243,6 +244,26 @@ Transform:
   m_Father: {fileID: 1939584469}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &289957450
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 289957447}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 8aa020a919ac6444e9c5648e55bacce9, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &333636714
 GameObject:
   m_ObjectHideFlags: 0
@@ -421,6 +442,7 @@ GameObject:
   m_Component:
   - component: {fileID: 431135790}
   - component: {fileID: 431135789}
+  - component: {fileID: 431135791}
   m_Layer: 0
   m_Name: GreenGhost
   m_TagString: Untagged
@@ -495,6 +517,26 @@ Transform:
   m_Father: {fileID: 1939584469}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &431135791
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 431135788}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: d8fe128572283497e85f45b56a4c8117, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &494398148
 GameObject:
   m_ObjectHideFlags: 0
@@ -1574,6 +1616,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1578736480}
   - component: {fileID: 1578736479}
+  - component: {fileID: 1578736481}
   m_Layer: 0
   m_Name: BlueGhost
   m_TagString: Untagged
@@ -1648,6 +1691,26 @@ Transform:
   m_Father: {fileID: 1939584469}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &1578736481
+Animator:
+  serializedVersion: 4
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578736478}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b40c5b3322a8a4f0099bcd4036cdc048, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &1758783825
 GameObject:
   m_ObjectHideFlags: 0
