@@ -21,15 +21,6 @@ AnimationClip:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: Infinity
-        outSlope: Infinity
-        tangentMode: 103
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
-      - serializedVersion: 3
         time: 0.3
         value: 1
         inSlope: Infinity
@@ -48,11 +39,11 @@ AnimationClip:
   m_PPtrCurves:
   - curve:
     - time: 0
-      value: {fileID: 422409861, guid: 262ce3614d5384e66a597e3cc5bccb33, type: 3}
+      value: {fileID: -101739451, guid: 3ca72d4f276844acfb2740dfa5b0e044, type: 3}
     - time: 0.1
-      value: {fileID: -1233440926, guid: 262ce3614d5384e66a597e3cc5bccb33, type: 3}
+      value: {fileID: -1035497233, guid: 3ca72d4f276844acfb2740dfa5b0e044, type: 3}
     - time: 0.2
-      value: {fileID: -1071398875, guid: 262ce3614d5384e66a597e3cc5bccb33, type: 3}
+      value: {fileID: 382717300, guid: 3ca72d4f276844acfb2740dfa5b0e044, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -81,9 +72,9 @@ AnimationClip:
       isPPtrCurve: 1
       isIntCurve: 0
     pptrCurveMapping:
-    - {fileID: 422409861, guid: 262ce3614d5384e66a597e3cc5bccb33, type: 3}
-    - {fileID: -1233440926, guid: 262ce3614d5384e66a597e3cc5bccb33, type: 3}
-    - {fileID: -1071398875, guid: 262ce3614d5384e66a597e3cc5bccb33, type: 3}
+    - {fileID: -101739451, guid: 3ca72d4f276844acfb2740dfa5b0e044, type: 3}
+    - {fileID: -1035497233, guid: 3ca72d4f276844acfb2740dfa5b0e044, type: 3}
+    - {fileID: 382717300, guid: 3ca72d4f276844acfb2740dfa5b0e044, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
@@ -108,15 +99,6 @@ AnimationClip:
   - curve:
       serializedVersion: 2
       m_Curve:
-      - serializedVersion: 3
-        time: 0
-        value: 1
-        inSlope: Infinity
-        outSlope: Infinity
-        tangentMode: 103
-        weightedMode: 0
-        inWeight: 0
-        outWeight: 0
       - serializedVersion: 3
         time: 0.3
         value: 1
