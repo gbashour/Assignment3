@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7be0d8a9e711a4f6cba530b6db5f8d83
+guid: 52bafbbb7f61049d4a9d0ea5d26f6994
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -71,7 +71,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: 4
-    textureCompression: 1
+    textureCompression: 2
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -106,7 +106,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Walls_0
+      name: WallsOld_0
       rect:
         serializedVersion: 2
         x: 0
@@ -120,35 +120,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4bf64a5e21e5a4d96a59aaefa6fd2169
-      internalID: 765833298
+      spriteID: 913be7206e23040b9b7f84a26e580880
+      internalID: 530299392
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Walls_1
-      rect:
-        serializedVersion: 2
-        x: 32
-        y: 32
-        width: 32
-        height: 32
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: a3522f4831da34223ad8cf903ec69e0a
-      internalID: 1920079381
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: Walls_2
+      name: WallsOld_1
       rect:
         serializedVersion: 2
         x: 64
@@ -162,18 +141,18 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 9db509360a0134a71a38f391cd8c7617
-      internalID: -688241636
+      spriteID: 4a049913585a84e97a373d9db4d1839c
+      internalID: 72658233
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Walls_3
+      name: WallsOld_2
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
+        x: 32
+        y: 32
         width: 32
         height: 32
       alignment: 0
@@ -183,14 +162,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 47f8512457d6946a6b0f5142068b40c5
-      internalID: -123694961
+      spriteID: fc061c447663f4597a7e76b1901d53c2
+      internalID: -782232674
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Walls_4
+      name: WallsOld_3
       rect:
         serializedVersion: 2
         x: 32
@@ -204,8 +183,50 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 42cba4cc3bb4848dd9b3a25c69e7e4fa
-      internalID: -2102413192
+      spriteID: 00a7145f61dba455597301267d111d46
+      internalID: 373198936
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WallsOld_4
+      rect:
+        serializedVersion: 2
+        x: 64
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: fb66ea93ee42b4334b2f4c89450b0a13
+      internalID: 890310269
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: WallsOld_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: df65bd393ee824699af24254a32427c0
+      internalID: 610675877
       vertices: []
       indices: 
       edges: []
@@ -221,11 +242,12 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Walls_0: 765833298
-      Walls_4: -2102413192
-      Walls_3: -123694961
-      Walls_1: 1920079381
-      Walls_2: -688241636
+      WallsOld_2: -782232674
+      WallsOld_5: 610675877
+      WallsOld_3: 373198936
+      WallsOld_4: 890310269
+      WallsOld_0: 530299392
+      WallsOld_1: 72658233
   spritePackingTag: 
   pSDRemoveMatte: 0
   userData: 
