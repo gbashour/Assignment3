@@ -14,12 +14,12 @@ public class Tweener : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Vector3.Distance(activeTween.Target.position, activeTween.EndPos) > 0.1f)
+        if (activeTween != null && Vector3.Distance(activeTween.Target.position, activeTween.EndPos) > 0.0f)
         {
             float t = ((float)Time.time - activeTween.StartTime) / activeTween.Duration;
             activeTween.Target.position = Vector3.Lerp(activeTween.StartPos, activeTween.EndPos, t);
         }
-        if (Vector3.Distance(activeTween.Target.position, activeTween.EndPos) <= 0.1f)
+        if (activeTween != null && Vector3.Distance(activeTween.Target.position, activeTween.EndPos) <= 0.0f)
         {
             activeTween.Target.position = activeTween.EndPos;
             activeTween = null;

@@ -27,8 +27,20 @@ public class PlayMovement : MonoBehaviour
         // LOGIC HERE -- whenever PacStudent reaches a corner, change animation state and then lerp in new direction
         if (item.transform.position == position1)
         {
-            animatorController.SetTrigger("ChangeState");
-            tweener.AddTween(item.transform, item.transform.position, position2, 3.0f);
+            if (animatorController.GetCurrentAnimatorStateInfo(0).IsName("DeadState"))
+            {
+                // Do nothing
+                audioSource.Stop();
+            }
+            else
+            {
+                if (!audioSource.isPlaying)
+                {
+                    audioSource.Play();
+                }
+                animatorController.SetTrigger("ChangeState");
+                tweener.AddTween(item.transform, item.transform.position, position2, 3.0f);
+            }
         }
         else if (item.transform.position == position2)
         {
