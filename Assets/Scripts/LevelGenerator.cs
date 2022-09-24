@@ -104,7 +104,7 @@ public class LevelGenerator : MonoBehaviour
             placement = new Vector3(-5.5f, placement.y - 1.0f, 0.0f); // next row on the grid, change in y value
         }
 
-        // Horizontal Mirroring
+        // Vertically Mirroring
         placement = new Vector3(8.5f, 4.5f, 0.0f); // position of top-right corner
         for (int i = 0; i < 15; i++) // nested for loop to iterate through 2D array
         {
@@ -159,6 +159,115 @@ public class LevelGenerator : MonoBehaviour
             placement = new Vector3(8.5f, placement.y - 1.0f, 0.0f); // next row on the grid, change in y value
         }
 
+        // Horizontal Mirroring
+        placement = new Vector3(-5.5f, -23.5f, 0.0f); // position of top-left corner
+        for (int i = 0; i < 14; i++) // nested for loop to iterate through 2D array -- because HORIZONTAL, ignore last element of levelMap
+        {
+            for (int j = 0; j < 14; j++)
+            {
+                if (levelMap[i, j] == 1)
+                {
+                    GameObject outsideCornerClone = Instantiate(outsideCorner, placement, Quaternion.identity);
+                    outsideCornerClone.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                    //outsideCornerClone.transform.Rotate(0.0f, 0.0f, 180.0f);
+                }
+                else if (levelMap[i, j] == 2)
+                {
+                    GameObject outsideWallClone = Instantiate(outsideWall, placement, Quaternion.identity);
+                    outsideWallClone.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                    //outsideWallClone.transform.Rotate(0.0f, 0.0f, 180.0f);
+                }
+                else if (levelMap[i, j] == 3)
+                {
+                    GameObject insideCornerClone = Instantiate(insideCorner, placement, Quaternion.identity);
+                    insideCornerClone.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                    //insideCornerClone.transform.Rotate(0.0f, 0.0f, 180.0f);
+                }
+                else if (levelMap[i, j] == 4)
+                {
+                    GameObject insideWallClone = Instantiate(insideWall, placement, Quaternion.identity);
+                    insideWallClone.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                    //insideWallClone.transform.Rotate(0.0f, 0.0f, 180.0f);
+                }
+                else if (levelMap[i, j] == 5)
+                {
+                    GameObject normalPelletClone = Instantiate(normalPellet, placement, Quaternion.identity); // no rotation
+                    normalPelletClone.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                }
+                else if (levelMap[i, j] == 6)
+                {
+                    GameObject powerPelletClone = Instantiate(powerPellet, placement, Quaternion.identity); // no rotation
+                    powerPelletClone.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                }
+                else if (levelMap[i, j] == 7)
+                {
+                    GameObject junctionClone = Instantiate(junction, placement, Quaternion.identity);
+                    junctionClone.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                    //junctionClone.transform.Rotate(0.0f, 0.0f, 270.0f);
+                }
+                else
+                {
+                    // Leave space for next tile if element = 0
+                }
+                placement = new Vector3(placement.x + 1.0f, placement.y, 0.0f); // next tile to the right, no change in y value
+            }
+            placement = new Vector3(-5.5f, placement.y + 1.0f, 0.0f); // next row on the grid, change in y value
+        }
+
+        // Horizontal Mirroring-Mirroring
+        placement = new Vector3(8.5f, -23.5f, 0.0f); // position of top-right corner
+        for (int i = 0; i < 14; i++) // nested for loop to iterate through 2D array -- because HORIZONTAL, ignore last element of levelMap
+        {
+            for (int j = 13; j > -1; j--)
+            {
+                if (levelMap[i, j] == 1)
+                {
+                    GameObject outsideCornerClone = Instantiate(outsideCorner, placement, Quaternion.identity);
+                    outsideCornerClone.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                    //outsideCornerClone.transform.Rotate(0.0f, 0.0f, 180.0f);
+                }
+                else if (levelMap[i, j] == 2)
+                {
+                    GameObject outsideWallClone = Instantiate(outsideWall, placement, Quaternion.identity);
+                    outsideWallClone.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                    //outsideWallClone.transform.Rotate(0.0f, 0.0f, 180.0f);
+                }
+                else if (levelMap[i, j] == 3)
+                {
+                    GameObject insideCornerClone = Instantiate(insideCorner, placement, Quaternion.identity);
+                    insideCornerClone.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                    //insideCornerClone.transform.Rotate(0.0f, 0.0f, 180.0f);
+                }
+                else if (levelMap[i, j] == 4)
+                {
+                    GameObject insideWallClone = Instantiate(insideWall, placement, Quaternion.identity);
+                    insideWallClone.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                    //insideWallClone.transform.Rotate(0.0f, 0.0f, 180.0f);
+                }
+                else if (levelMap[i, j] == 5)
+                {
+                    GameObject normalPelletClone = Instantiate(normalPellet, placement, Quaternion.identity); // no rotation
+                    normalPelletClone.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                }
+                else if (levelMap[i, j] == 6)
+                {
+                    GameObject powerPelletClone = Instantiate(powerPellet, placement, Quaternion.identity); // no rotation
+                    powerPelletClone.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                }
+                else if (levelMap[i, j] == 7)
+                {
+                    GameObject junctionClone = Instantiate(junction, placement, Quaternion.identity);
+                    junctionClone.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
+                    //junctionClone.transform.Rotate(0.0f, 0.0f, 270.0f);
+                }
+                else
+                {
+                    // Leave space for next tile if element = 0
+                }
+                placement = new Vector3(placement.x + 1.0f, placement.y, 0.0f); // next tile to the right, no change in y value
+            }
+            placement = new Vector3(8.5f, placement.y + 1.0f, 0.0f); // next row on the grid, change in y value
+        }
     }
 
     // Update is called once per frame
