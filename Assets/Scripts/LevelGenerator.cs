@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
 {
-    public GameObject powerPellet;
-    public GameObject outsideCorner;
-    public GameObject outsideWall;
-    public GameObject insideCorner;
-    public GameObject insideWall;
-    public GameObject normalPellet;
-    public GameObject junction;
+    public GameObject powerPellet = GameObject.Find("PowerPellet").GetComponent<GameObject>();
+    public GameObject outsideCorner = GameObject.Find("OutsideCorner").GetComponent<GameObject>();
+    public GameObject outsideWall = GameObject.Find("OutsideWall").GetComponent<GameObject>();
+    public GameObject insideCorner = GameObject.Find("InsideCorner").GetComponent<GameObject>();
+    public GameObject insideWall = GameObject.Find("InsideWall").GetComponent<GameObject>();
+    public GameObject normalPellet = GameObject.Find("NormalPellet").GetComponent<GameObject>();
+    public GameObject junction = GameObject.Find("Junction").GetComponent<GameObject>();
 
-    public Grid grid; // Grid to clear? Tilemap?
+    public Grid grid = GameObject.Find("Grid").GetComponent<Grid>(); // Grid to clear? Tilemap?
 
     int[,] levelMap =
         {
@@ -37,7 +37,7 @@ public class LevelGenerator : MonoBehaviour
     void Start()
     {
         // Delete the existing Level 1 Scene -- i.e clear Tilemap
-        
+        Destroy(grid);
         // Procedurally Generate Level:
         // Variable for keeping track of position
         Vector3 placement = new Vector3(-5.5f, 4.5f, 0.0f); // position of top-left corner
@@ -48,22 +48,27 @@ public class LevelGenerator : MonoBehaviour
                 if (levelMap[i, j] == 1)
                 {
                     GameObject outsideCornerClone = Instantiate(outsideCorner, placement, Quaternion.identity);
+                    //outsideCornerClone.transform.localScale -- scale back to 1,1,1 ?
+                    //outsideCornerClone.transform.Rotate(0.0f, 0.0f, 180.0f);
                 }
                 else if (levelMap[i, j] == 2)
                 {
                     GameObject outsideWallClone = Instantiate(outsideWall, placement, Quaternion.identity);
+                    //outsideWallClone.transform.Rotate(0.0f, 0.0f, 180.0f);
                 }
                 else if (levelMap[i, j] == 3)
                 {
                     GameObject insideCornerClone = Instantiate(insideCorner, placement, Quaternion.identity);
+                    //insideCornerClone.transform.Rotate(0.0f, 0.0f, 180.0f);
                 }
                 else if (levelMap[i, j] == 4)
                 {
                     GameObject insideWallClone = Instantiate(insideWall, placement, Quaternion.identity);
+                    //insideWallClone.transform.Rotate(0.0f, 0.0f, 180.0f);
                 }
                 else if (levelMap[i, j] == 5)
                 {
-                    GameObject normalPelletClone = Instantiate(normalPellet, placement, Quaternion.identity);
+                    GameObject normalPelletClone = Instantiate(normalPellet, placement, Quaternion.identity); // no rotation
                 }
                 else if (levelMap[i, j] == 6)
                 {
@@ -72,7 +77,7 @@ public class LevelGenerator : MonoBehaviour
                 else if (levelMap[i, j] == 7)
                 {
                     GameObject junctionClone = Instantiate(junction, placement, Quaternion.identity);
-                    //junctionClone.transform.Rotate();
+                    //junctionClone.transform.Rotate(0.0f, 0.0f, 270.0f);
                 }
                 else
                 {
