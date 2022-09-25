@@ -51,9 +51,9 @@ public class LevelGenerator : MonoBehaviour
         // Procedurally Generate Level:
         // Variable for keeping track of position
         Vector3 placement = new Vector3(-5.5f, 4.5f, 0.0f); // position of top-left corner
-        for (int i = 0; i < 15; i++) // nested for loop to iterate through 2D array
+        for (int i = 0; i < levelMap.GetLength(0); i++) // nested for loop to iterate through 2D array
         {
-            for (int j = 0; j < 14; j++)
+            for (int j = 0; j < levelMap.GetLength(1); j++)
             {
                 if (levelMap[i, j] == 1)
                 {
@@ -85,27 +85,42 @@ public class LevelGenerator : MonoBehaviour
                 {
                     GameObject insideCornerClone = Instantiate(insideCorner, placement, Quaternion.identity);
                     insideCornerClone.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-                    if (levelMap[i, j - 1] == 5 || levelMap[i + 1, j] == 4)
+                    if (j != levelMap.GetLength(1)-1)
                     {
-                        insideCornerClone.transform.Rotate(0.0f, 0.0f, 270.0f); // rotate top-left corner
+                        if ((levelMap[i + 1, j] == 4 || levelMap[i + 1, j] == 3) && (levelMap[i, j + 1] == 4 || levelMap[i, j + 1] == 3))
+                        {
+                            insideCornerClone.transform.Rotate(0.0f, 0.0f, 270.0f); // rotate top-left corner
+                        }
+
+                        else if ((levelMap[i + 1, j] == 4 || levelMap[i + 1, j] == 3) && (levelMap[i, j - 1] == 4 || levelMap[i, j - 1] == 3))
+                        {
+                            insideCornerClone.transform.Rotate(0.0f, 0.0f, 180.0f); // rotate top-right corner
+                        }
+                        else if ((levelMap[i - 1, j] == 4 || levelMap[i - 1, j] == 3) && (levelMap[i, j - 1] == 4 || levelMap[i, j - 1] == 3))
+                        {
+                            insideCornerClone.transform.Rotate(0.0f, 0.0f, 90.0f); // rotate bottom-right corner
+                        }
                     }
-                    else if (levelMap[i, j - 1] == 5)
+                    else
                     {
-                        insideCornerClone.transform.Rotate(0.0f, 0.0f, 180.0f); // rotate top-right corner
-                    }
-                    else if (levelMap[i - 1, j] == 3)
-                    {
-                        insideCornerClone.transform.Rotate(0.0f, 0.0f, 90.0f); // rotate bottom-left corner
+                        if ((levelMap[i + 1, j] == 4 || levelMap[i + 1, j] == 3) && (levelMap[i, j - 1] == 4 || levelMap[i, j - 1] == 3))
+                        {
+                            insideCornerClone.transform.Rotate(0.0f, 0.0f, 180.0f); // rotate top-right corner
+                        }
+                        else if ((levelMap[i - 1, j] == 4 || levelMap[i - 1, j] == 3) && (levelMap[i, j - 1] == 4 || levelMap[i, j - 1] == 3))
+                        {
+                            insideCornerClone.transform.Rotate(0.0f, 0.0f, 90.0f); // rotate bottom-right corner
+                        }
                     }
                 }
                 else if (levelMap[i, j] == 4)
                 {
                     GameObject insideWallClone = Instantiate(insideWall, placement, Quaternion.identity);
                     insideWallClone.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-                    if (levelMap[i, j - 1] == 5 || levelMap[i, j - 1] == 0 || levelMap[i, j - 1] == 6)
-                    {
-                        insideWallClone.transform.Rotate(0.0f, 0.0f, 90.0f);
-                    }
+                        if (levelMap[i, j - 1] != 3)
+                        {
+                            insideWallClone.transform.Rotate(0.0f, 0.0f, 90.0f);
+                        }
                 }
                 else if (levelMap[i, j] == 5)
                 {
@@ -137,15 +152,28 @@ public class LevelGenerator : MonoBehaviour
 
         // Vertically Mirroring
         placement = new Vector3(8.5f, 4.5f, 0.0f); // position of top-right corner
-        for (int i = 0; i < 15; i++) // nested for loop to iterate through 2D array
+        for (int i = 0; i < levelMap.GetLength(0); i++) // nested for loop to iterate through 2D array
         {
-            for (int j = 13; j > -1; j--)
+            for (int j = levelMap.GetLength(1)-1; j > -1; j--)
             {
                 if (levelMap[i, j] == 1)
                 {
                     GameObject outsideCornerClone = Instantiate(outsideCorner, placement, Quaternion.identity);
                     outsideCornerClone.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-                    //outsideCornerClone.transform.Rotate(0.0f, 0.0f, 180.0f);
+                    if (j != 0) {
+                        if (levelMap[i + 1, j] == 2 && levelMap[i, j - 1] == 2)
+                        {
+                            outsideCornerClone.transform.Rotate(0.0f, 0.0f, 180.0f); // top left corner
+                        }
+                        else if (levelMap[i - 1, j] == 2 && levelMap[i, j - 1] == 2)
+                        {
+                            outsideCornerClone.transform.Rotate(0.0f, 0.0f, 270.0f); // bottom left corner
+                        }
+                    }
+                    else if (levelMap[i + 1, j] == 2 && levelMap[i, j + 1] == 2)
+                    {
+                        outsideCornerClone.transform.Rotate(0.0f, 0.0f, 90.0f); // top right corner
+                    }
                 }
                 else if (levelMap[i, j] == 2)
                 {
@@ -212,15 +240,26 @@ public class LevelGenerator : MonoBehaviour
 
         // Horizontal Mirroring
         placement = new Vector3(-5.5f, -23.5f, 0.0f); // position of top-left corner
-        for (int i = 0; i < 14; i++) // nested for loop to iterate through 2D array -- because HORIZONTAL, ignore last element of levelMap
+        for (int i = 0; i < levelMap.GetLength(1); i++) // nested for loop to iterate through 2D array -- because HORIZONTAL, ignore last element of levelMap
         {
-            for (int j = 0; j < 14; j++)
+            for (int j = 0; j < levelMap.GetLength(1); j++)
             {
                 if (levelMap[i, j] == 1)
                 {
                     GameObject outsideCornerClone = Instantiate(outsideCorner, placement, Quaternion.identity);
                     outsideCornerClone.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-                    //outsideCornerClone.transform.Rotate(0.0f, 0.0f, 180.0f);
+                    if (levelMap[i + 1, j] == 2 && levelMap[i, j + 1] == 2)
+                    {
+                        outsideCornerClone.transform.Rotate(0.0f, 0.0f, 180.0f); // top left corner
+                    }
+                    else if (levelMap[i - 1, j] == 2 && levelMap[i, j + 1] == 2)
+                    {
+                        outsideCornerClone.transform.Rotate(0.0f, 0.0f, 270.0f); // bottom left corner
+                    }
+                    else if (levelMap[i + 1, j] == 2 && levelMap[i, j + 1] == 5)
+                    {
+                        outsideCornerClone.transform.Rotate(0.0f, 0.0f, 90.0f); // top right corner
+                    }
                 }
                 else if (levelMap[i, j] == 2)
                 {
@@ -287,15 +326,29 @@ public class LevelGenerator : MonoBehaviour
 
         // Horizontal Mirroring-Mirroring
         placement = new Vector3(8.5f, -23.5f, 0.0f); // position of top-right corner
-        for (int i = 0; i < 14; i++) // nested for loop to iterate through 2D array -- because HORIZONTAL, ignore last element of levelMap
+        for (int i = 0; i < levelMap.GetLength(1); i++) // nested for loop to iterate through 2D array -- because HORIZONTAL, ignore last element of levelMap
         {
-            for (int j = 13; j > -1; j--)
+            for (int j = levelMap.GetLength(1)-1; j > -1; j--)
             {
                 if (levelMap[i, j] == 1)
                 {
                     GameObject outsideCornerClone = Instantiate(outsideCorner, placement, Quaternion.identity);
                     outsideCornerClone.transform.localScale = new Vector3(1.0f, 1.0f, 1.0f);
-                    //outsideCornerClone.transform.Rotate(0.0f, 0.0f, 180.0f);
+                    if (j != 0)
+                    {
+                        if (levelMap[i + 1, j] == 2 && levelMap[i, j - 1] == 2)
+                        {
+                            outsideCornerClone.transform.Rotate(0.0f, 0.0f, 180.0f); // top left corner
+                        }
+                        else if (levelMap[i - 1, j] == 2 && levelMap[i, j - 1] == 2)
+                        {
+                            outsideCornerClone.transform.Rotate(0.0f, 0.0f, 270.0f); // bottom left corner
+                        }
+                    }
+                    else if (levelMap[i + 1, j] == 2 && levelMap[i, j + 1] == 2)
+                    {
+                        outsideCornerClone.transform.Rotate(0.0f, 0.0f, 90.0f); // top right corner
+                    }
                 }
                 else if (levelMap[i, j] == 2)
                 {
