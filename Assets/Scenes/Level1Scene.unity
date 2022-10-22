@@ -3298,29 +3298,14 @@ GameObject:
   m_Component:
   - component: {fileID: 1918879966}
   - component: {fileID: 1918879965}
-  - component: {fileID: 1918879964}
+  - component: {fileID: 1918879967}
   m_Layer: 0
   m_Name: PacStudentController
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!114 &1918879964
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1918879963}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 893ea54e388194498bd8da6a93c350db, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  item: {fileID: 1926445512}
-  audioSource: {fileID: 1313055402}
-  animatorController: {fileID: 1926445515}
+  m_IsActive: 1
 --- !u!114 &1918879965
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3348,6 +3333,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1918879967
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1918879963}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 17658f36ca43c4a24a3175ae90da647c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  item: {fileID: 1926445512}
 --- !u!1 &1926445512
 GameObject:
   m_ObjectHideFlags: 0
