@@ -8,6 +8,7 @@ public class PacStudentController : MonoBehaviour
     [SerializeField] private GameObject item;
     public AudioSource audioSource;
     KeyCode lastInput;
+    KeyCode currentInput;
     public Animator animator;
 
     List<Vector3> walkableTiles;
@@ -45,38 +46,68 @@ public class PacStudentController : MonoBehaviour
         audioSource = GameObject.Find("Footsteps Sound Effect").GetComponent<AudioSource>();
         item.transform.position = new Vector3(-4.5f, 3.5f, 0.0f); // teleport PacStudent to left corner grid position if not there already
         walkableTiles = new List<Vector3>();
+
+        nonWalkableTiles();
     }
 
     // Update is called once per frame
     void Update()
     {
+        float xPos = item.transform.position.x;
+        float yPos = item.transform.position.y;
         if (Input.GetKeyDown(KeyCode.W)) // Move PacStudent Up
         {
-            float xPos = item.transform.position.x;
-            float yPos = item.transform.position.y;
+            //float xPos = item.transform.position.x;
+            //float yPos = item.transform.position.y;
             tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f);
             lastInput = KeyCode.W;
         }
         if (Input.GetKeyDown(KeyCode.A)) // Move PacStudent Left
         {
-            float xPos = item.transform.position.x;
-            float yPos = item.transform.position.y;
+            //float xPos = item.transform.position.x;
+            //float yPos = item.transform.position.y;
             tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
             lastInput = KeyCode.A;
         }
         if (Input.GetKeyDown(KeyCode.S)) // Move PacStudent Down
         {
-            float xPos = item.transform.position.x;
-            float yPos = item.transform.position.y;
+            //float xPos = item.transform.position.x;
+            //float yPos = item.transform.position.y;
             tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
             lastInput = KeyCode.S;
         }
         if (Input.GetKeyDown(KeyCode.D)) // Move PacStudent Right
         {
-            float xPos = item.transform.position.x;
-            float yPos = item.transform.position.y;
+            //float xPos = item.transform.position.x;
+            //float yPos = item.transform.position.y;
             tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
             lastInput = KeyCode.D;
+        }
+        if (xPos % 0.5f == 0.0f || yPos % 0.5f == 0.0f) // if PacStudent is not lerping
+        {
+            if (lastInput == KeyCode.W && isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
+            {
+                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f);
+                currentInput = KeyCode.W;
+            } else
+            {
+                // try to move in direction of currentInput
+            }
+            if (lastInput == KeyCode.A && isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
+            {
+                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
+                currentInput = KeyCode.A;
+            }
+            if (lastInput == KeyCode.S && isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
+            {
+                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
+                currentInput = KeyCode.S;
+            }
+            if (lastInput == KeyCode.D && isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
+            {
+                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
+                currentInput = KeyCode.D;
+            }
         }
     }
     /* NOTES FROM VIDEO */
