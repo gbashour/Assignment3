@@ -7,18 +7,12 @@ public class PacStudentController : MonoBehaviour
     private Tweener tweener;
     [SerializeField] private GameObject item;
     public AudioSource audioSource;
+    public AudioSource audioSource1;
     KeyCode lastInput;
     KeyCode currentInput;
     public Animator animator;
 
     List<Vector3> walkableTiles;
-    //public Vector3[] walkableTiles =
-       // {
-        // first line -- -4.5 --> 7.5 is not walkable
-        // anything with an x value of -5.5 is not walkable
-        // anything with a y value of 4.5 is not walkable
-        // 
-       // };
 
     int[,] levelMap =
         {
@@ -44,6 +38,7 @@ public class PacStudentController : MonoBehaviour
     {
         tweener = gameObject.GetComponent<Tweener>();
         audioSource = GameObject.Find("Footsteps Sound Effect").GetComponent<AudioSource>();
+        audioSource1 = GameObject.Find("Pellet Eating Sound Effect").GetComponent<AudioSource>();
         item.transform.position = new Vector3(-4.5f, 3.5f, 0.0f); // teleport PacStudent to left corner grid position if not there already
         walkableTiles = new List<Vector3>();
 
@@ -53,132 +48,161 @@ public class PacStudentController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        float xPos = item.transform.position.x;
-        float yPos = item.transform.position.y;
+        float x = item.transform.position.x + 0.5f;
+        float y = item.transform.position.y + 0.5f;
+        float xPos = Mathf.Round(x) - 0.5f;
+        float yPos = Mathf.Round(y) - 0.5f;
+
         if (Input.GetKeyDown(KeyCode.W)) // Move PacStudent Up
         {
-            //float xPos = item.transform.position.x;
-            //float yPos = item.transform.position.y;
-            tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f);
             lastInput = KeyCode.W;
+            if (isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
+            {
+                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f);
+                currentInput = KeyCode.W;
+            }
         }
         if (Input.GetKeyDown(KeyCode.A)) // Move PacStudent Left
         {
-            //float xPos = item.transform.position.x;
-            //float yPos = item.transform.position.y;
-            tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
             lastInput = KeyCode.A;
+            if (isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
+            {
+                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
+                currentInput = KeyCode.A;
+            }
         }
         if (Input.GetKeyDown(KeyCode.S)) // Move PacStudent Down
         {
-            //float xPos = item.transform.position.x;
-            //float yPos = item.transform.position.y;
-            tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
             lastInput = KeyCode.S;
+            if (isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f)))
+            {
+                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
+                currentInput = KeyCode.S;
+            }
         }
         if (Input.GetKeyDown(KeyCode.D)) // Move PacStudent Right
         {
-            //float xPos = item.transform.position.x;
-            //float yPos = item.transform.position.y;
-            tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
             lastInput = KeyCode.D;
+            if (isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
+            {
+                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
+                currentInput = KeyCode.D;
+            }
         }
+
         if (xPos % 0.5f == 0.0f || yPos % 0.5f == 0.0f) // if PacStudent is not lerping
         {
             if (lastInput == KeyCode.W && isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
             {
+                currentInput = lastInput;
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f);
-                currentInput = KeyCode.W;
-            } else if (currentInput == KeyCode.W && isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
+            }
+            else
             {
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f); // try to move in direction of currentInput
-            } else if (currentInput == KeyCode.A && isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
-            {
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
-            } else if (currentInput == KeyCode.S && isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f)))
-            {
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
-            } else if (currentInput == KeyCode.D && isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
-            {
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
-            } else
-            {
-                // Stop Moving
+                if (currentInput == KeyCode.W && isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
+                {
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f); // try to move in direction of currentInput
+                }
+                if (currentInput == KeyCode.A && isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
+                {
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
+                }
+                if (currentInput == KeyCode.S && isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f)))
+                {
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
+                }
+                if (currentInput == KeyCode.D && isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
+                {
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
+                }
+                else
+                {
+                    audioSource.Stop(); // Stop Moving -- i.e no footsteps
+                }
             }
 
             if (lastInput == KeyCode.A && isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
             {
+                currentInput = lastInput;
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
-                currentInput = KeyCode.A;
-            } else if (currentInput == KeyCode.W && isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
+            } else
             {
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f); // try to move in direction of currentInput
-            }
-            else if (currentInput == KeyCode.A && isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
-            {
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
-            }
-            else if (currentInput == KeyCode.S && isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f)))
-            {
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
-            }
-            else if (currentInput == KeyCode.D && isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
-            {
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
-            }
-            else
-            {
-                // Stop Moving
+                if (currentInput == KeyCode.W && isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
+                {
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f); // try to move in direction of currentInput
+                }
+                if (currentInput == KeyCode.A && isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
+                {
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
+                }
+                if (currentInput == KeyCode.S && isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f)))
+                {
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
+                }
+                if (currentInput == KeyCode.D && isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
+                {
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
+                }
+                else
+                {
+                    audioSource.Stop(); // Stop Moving
+                }
             }
 
-            if (lastInput == KeyCode.S && isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f)))
+            if (lastInput == KeyCode.S && isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f))) // entering this if statement when it shouldnt be
             {
+                currentInput = lastInput;
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
-                currentInput = KeyCode.S;
-            } else if (currentInput == KeyCode.W && isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
+            } else
             {
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f); // try to move in direction of currentInput
-            }
-            else if (currentInput == KeyCode.A && isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
-            {
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
-            }
-            else if (currentInput == KeyCode.S && isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f)))
-            {
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
-            }
-            else if (currentInput == KeyCode.D && isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
-            {
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
-            }
-            else
-            {
-                // Stop Moving
+                if (currentInput == KeyCode.W && isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
+                {
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f); // try to move in direction of currentInput
+                }
+                if (currentInput == KeyCode.A && isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
+                {
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
+                }
+                if (currentInput == KeyCode.S && isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f)))
+                {
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
+                }
+                if (currentInput == KeyCode.D && isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
+                {
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
+                }
+                else
+                {
+                    audioSource.Stop(); // Stop Moving
+                }
             }
 
             if (lastInput == KeyCode.D && isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
             {
+                currentInput = lastInput;
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
-                currentInput = KeyCode.D;
-            } else if (currentInput == KeyCode.W && isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
+            } else
             {
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f); // try to move in direction of currentInput
-            }
-            else if (currentInput == KeyCode.A && isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
-            {
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
-            }
-            else if (currentInput == KeyCode.S && isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f)))
-            {
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
-            }
-            else if (currentInput == KeyCode.D && isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
-            {
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
-            }
-            else
-            {
-                // Stop Moving
+                if (currentInput == KeyCode.W && isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
+                {
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f); // try to move in direction of currentInput
+                }
+                if (currentInput == KeyCode.A && isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
+                {
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
+                }
+                if (currentInput == KeyCode.S && isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f)))
+                {
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
+                }
+                if (currentInput == KeyCode.D && isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
+                {
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
+                }
+                else
+                {
+                    audioSource.Stop(); // Stop Moving
+                }
             }
         }
     }
