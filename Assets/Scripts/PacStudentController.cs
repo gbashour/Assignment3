@@ -11,6 +11,7 @@ public class PacStudentController : MonoBehaviour
     KeyCode lastInput;
     KeyCode currentInput;
     public Animator animator;
+    public ParticleSystem particleEffect;
 
     List<Vector3> walkableTiles;
     Vector3 lerpDestination;
@@ -42,6 +43,7 @@ public class PacStudentController : MonoBehaviour
         audioSource1 = GameObject.Find("Pellet Eating Sound Effect").GetComponent<AudioSource>();
         item.transform.position = new Vector3(-4.5f, 3.5f, 0.0f); // teleport PacStudent to left corner grid position if not there already
         walkableTiles = new List<Vector3>();
+        particleEffect = GameObject.Find("Dust Particle Effect").GetComponent<ParticleSystem>();
 
         nonWalkableTiles();
     }
@@ -52,13 +54,30 @@ public class PacStudentController : MonoBehaviour
         // BUG FOUND: if user inputs a new key before halfway through lerp, it rounds down (Mathf.Round() rounds down if 0.1 - 0.5, up for 0.6 +)
         // FIX: add a conditional to ensure always rounds up to grid position of next lerp ?
         // always round to the position that they will be in???
+
+        //float originalPos = item.transform.position.x;
+
         float x = item.transform.position.x + 0.5f;
         float y = item.transform.position.y + 0.5f;
         float xPos = Mathf.Round(x) - 0.5f;
         float yPos = Mathf.Round(y) - 0.5f;
 
+        //if (originalPos < -4.0f && originalPos > -4.5f) // this works but is hard coded -- need to make this dynamic ?
+        //{
+         //   xPos = -3.5f;
+       // }
+
         updateAudio(xPos, yPos);
         updateAnimation();
+
+        if (checkCurrentInput(xPos, yPos) && !particleEffect.isPlaying)
+        {
+            particleEffect.Play();
+        } else if (!checkCurrentInput(xPos, yPos))
+        {
+            particleEffect.Clear();
+            particleEffect.Stop();
+        }
 
         if (Input.GetKeyDown(KeyCode.W)) // Move PacStudent Up
         {
@@ -279,6 +298,7 @@ public class PacStudentController : MonoBehaviour
             if (!animator.GetCurrentAnimatorStateInfo(0).IsName("UpWalking"))
             {
                 animator.Play("UpWalking", 0);
+                //particleEffect.transform.Rotate(-270.0f, 90.0f, -90.0f);
             }
         }
         if (currentInput == KeyCode.A)
@@ -286,6 +306,7 @@ public class PacStudentController : MonoBehaviour
             if (!animator.GetCurrentAnimatorStateInfo(0).IsName("LeftWalking"))
             {
                 animator.Play("LeftWalking", 0);
+                //particleEffect.transform.Rotate(0.0f, 90.0f, -90.0f);
             }
         }
         if (currentInput == KeyCode.S)
@@ -293,6 +314,7 @@ public class PacStudentController : MonoBehaviour
             if (!animator.GetCurrentAnimatorStateInfo(0).IsName("DownWalking"))
             {
                 animator.Play("DownWalking", 0);
+                //particleEffect.transform.Rotate(-90.0f, 90.0f, -90.0f);
             }
         }
         if (currentInput == KeyCode.D)
@@ -300,6 +322,7 @@ public class PacStudentController : MonoBehaviour
             if (!animator.GetCurrentAnimatorStateInfo(0).IsName("RightWalking"))
             {
                 animator.Play("RightWalking", 0);
+                //particleEffect.transform.Rotate(-180.0f, 90.0f, -90.0f);
             }
         }
         else
