@@ -13,6 +13,7 @@ public class PacStudentController : MonoBehaviour
     public Animator animator;
 
     List<Vector3> walkableTiles;
+    Vector3 lerpDestination;
 
     int[,] levelMap =
         {
@@ -48,10 +49,16 @@ public class PacStudentController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // BUG FOUND: if user inputs a new key before halfway through lerp, it rounds down (Mathf.Round() rounds down if 0.1 - 0.5, up for 0.6 +)
+        // FIX: add a conditional to ensure always rounds up to grid position of next lerp ?
+        // always round to the position that they will be in???
         float x = item.transform.position.x + 0.5f;
         float y = item.transform.position.y + 0.5f;
         float xPos = Mathf.Round(x) - 0.5f;
         float yPos = Mathf.Round(y) - 0.5f;
+
+        updateAudio(xPos, yPos);
+        updateAnimation();
 
         if (Input.GetKeyDown(KeyCode.W)) // Move PacStudent Up
         {
@@ -59,6 +66,7 @@ public class PacStudentController : MonoBehaviour
             if (isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
             {
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f);
+                lerpDestination = new Vector3(xPos, yPos + 1.0f, 0.0f);
                 currentInput = KeyCode.W;
             }
         }
@@ -68,24 +76,30 @@ public class PacStudentController : MonoBehaviour
             if (isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
             {
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
+                lerpDestination = new Vector3(xPos - 1.0f, yPos, 0.0f);
                 currentInput = KeyCode.A;
             }
         }
         if (Input.GetKeyDown(KeyCode.S)) // Move PacStudent Down
         {
+            Debug.Log("S was pressed");
             lastInput = KeyCode.S;
             if (isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f)))
             {
+                Debug.Log("I should not be lerping down");
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
+                lerpDestination = new Vector3(xPos, yPos - 1.0f, 0.0f);
                 currentInput = KeyCode.S;
             }
         }
         if (Input.GetKeyDown(KeyCode.D)) // Move PacStudent Right
         {
+            Debug.Log("First key down D");
             lastInput = KeyCode.D;
             if (isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
             {
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
+                lerpDestination = new Vector3(xPos + 1.0f, yPos, 0.0f);
                 currentInput = KeyCode.D;
             }
         }
@@ -96,113 +110,42 @@ public class PacStudentController : MonoBehaviour
             {
                 currentInput = lastInput;
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f);
+                lerpDestination = new Vector3(xPos, yPos + 1.0f, 0.0f);
             }
             else
             {
-                if (currentInput == KeyCode.W && isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
-                {
-                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f); // try to move in direction of currentInput
-                }
-                if (currentInput == KeyCode.A && isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
-                {
-                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
-                }
-                if (currentInput == KeyCode.S && isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f)))
-                {
-                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
-                }
-                if (currentInput == KeyCode.D && isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
-                {
-                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
-                }
-                else
-                {
-                    audioSource.Stop(); // Stop Moving -- i.e no footsteps
-                }
+                checkCurrentInput(xPos, yPos);
             }
 
             if (lastInput == KeyCode.A && isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
             {
                 currentInput = lastInput;
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
+                lerpDestination = new Vector3(xPos - 1.0f, yPos, 0.0f);
             } else
             {
-                if (currentInput == KeyCode.W && isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
-                {
-                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f); // try to move in direction of currentInput
-                }
-                if (currentInput == KeyCode.A && isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
-                {
-                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
-                }
-                if (currentInput == KeyCode.S && isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f)))
-                {
-                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
-                }
-                if (currentInput == KeyCode.D && isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
-                {
-                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
-                }
-                else
-                {
-                    audioSource.Stop(); // Stop Moving
-                }
+                checkCurrentInput(xPos, yPos);
             }
 
             if (lastInput == KeyCode.S && isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f))) // entering this if statement when it shouldnt be
             {
+                Debug.Log("NO");
                 currentInput = lastInput;
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
+                lerpDestination = new Vector3(xPos, yPos - 1.0f, 0.0f);
             } else
             {
-                if (currentInput == KeyCode.W && isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
-                {
-                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f); // try to move in direction of currentInput
-                }
-                if (currentInput == KeyCode.A && isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
-                {
-                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
-                }
-                if (currentInput == KeyCode.S && isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f)))
-                {
-                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
-                }
-                if (currentInput == KeyCode.D && isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
-                {
-                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
-                }
-                else
-                {
-                    audioSource.Stop(); // Stop Moving
-                }
+                checkCurrentInput(xPos, yPos);
             }
 
             if (lastInput == KeyCode.D && isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
             {
                 currentInput = lastInput;
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
+                lerpDestination = new Vector3(xPos + 1.0f, yPos, 0.0f);
             } else
             {
-                if (currentInput == KeyCode.W && isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
-                {
-                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f); // try to move in direction of currentInput
-                }
-                if (currentInput == KeyCode.A && isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
-                {
-                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
-                }
-                if (currentInput == KeyCode.S && isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f)))
-                {
-                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
-                }
-                if (currentInput == KeyCode.D && isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
-                {
-                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
-                }
-                else
-                {
-                    audioSource.Stop(); // Stop Moving
-                }
+                checkCurrentInput(xPos, yPos);
             }
         }
     }
@@ -284,5 +227,84 @@ public class PacStudentController : MonoBehaviour
             }
         }
         return true;
+    }
+
+    public bool checkCurrentInput(float xPos, float yPos) // returns true if moving
+    {
+        if (currentInput == KeyCode.W && isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
+        {
+            tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f); // try to move in direction of currentInput
+            lerpDestination = new Vector3(xPos, yPos + 1.0f, 0.0f);
+            return true;
+        }
+        if (currentInput == KeyCode.A && isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
+        {
+            tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
+            lerpDestination = new Vector3(xPos - 1.0f, yPos, 0.0f);
+            return true;
+        }
+        if (currentInput == KeyCode.S && isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f)))
+        {
+            tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
+            lerpDestination = new Vector3(xPos, yPos - 1.0f, 0.0f);
+            return true;
+        }
+        if (currentInput == KeyCode.D && isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
+        {
+            tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
+            lerpDestination = new Vector3(xPos + 1.0f, yPos, 0.0f);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void updateAudio(float xPos, float yPos)
+    {
+        if (!checkCurrentInput(xPos, yPos))
+        {
+            audioSource1.Stop();
+        } else if (!audioSource1.isPlaying)
+        {
+            audioSource1.Play();
+        }
+    }
+
+    public void updateAnimation()
+    {
+        if (currentInput == KeyCode.W)
+        {
+            if (!animator.GetCurrentAnimatorStateInfo(0).IsName("UpWalking"))
+            {
+                animator.Play("UpWalking", 0);
+            }
+        }
+        if (currentInput == KeyCode.A)
+        {
+            if (!animator.GetCurrentAnimatorStateInfo(0).IsName("LeftWalking"))
+            {
+                animator.Play("LeftWalking", 0);
+            }
+        }
+        if (currentInput == KeyCode.S)
+        {
+            if (!animator.GetCurrentAnimatorStateInfo(0).IsName("DownWalking"))
+            {
+                animator.Play("DownWalking", 0);
+            }
+        }
+        if (currentInput == KeyCode.D)
+        {
+            if (!animator.GetCurrentAnimatorStateInfo(0).IsName("RightWalking"))
+            {
+                animator.Play("RightWalking", 0);
+            }
+        }
+        else
+        {
+            // Do something else in future for Dead State
+        }
     }
 }
