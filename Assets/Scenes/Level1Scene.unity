@@ -7056,6 +7056,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1224731190}
   - component: {fileID: 1224731189}
+  - component: {fileID: 1224731191}
   m_Layer: 0
   m_Name: BonusPeachController
   m_TagString: Untagged
@@ -7091,6 +7092,18 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1224731191
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1224731188}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1d9d81328bdb345aaba06b77d55bc901, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1272006156
 GameObject:
   m_ObjectHideFlags: 0
