@@ -15,7 +15,6 @@ public class PacStudentController : MonoBehaviour
 
     List<Vector3> walkableTiles;
     Vector3 lerpDestination;
-    bool isRoundedUp;
 
     float originalXPos;
     float originalYPos;
@@ -257,6 +256,12 @@ public class PacStudentController : MonoBehaviour
             }
             placement = new Vector3(8.5f, placement.y + 1.0f, 0.0f); // next row on the grid, change in y value
         }
+
+        /* Middle Box */
+        walkableTiles.Add(new Vector3(7.5f, -7.5f, 0.0f));
+        walkableTiles.Add(new Vector3(8.5f, -7.5f, 0.0f));
+        walkableTiles.Add(new Vector3(7.5f, -11.5f, 0.0f));
+        walkableTiles.Add(new Vector3(8.5f, -11.5f, 0.0f));
     }
 
     public bool isWalkable(Vector3 tile) // Search function that checks if a tile is walkable

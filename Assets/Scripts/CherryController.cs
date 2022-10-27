@@ -32,8 +32,6 @@ public class CherryController : MonoBehaviour
         timer += Time.deltaTime;
         if ((int)timer % 10 == 0 && (int)timer > 1) // if timer is divisble by 10
         {
-            Debug.Log(timer);
-            Debug.Log("Peach Spawned");
             spawnPeach();
             timer = 0; // reset timer to fix duplication bug (float keeps rounding down to 10)
         }
