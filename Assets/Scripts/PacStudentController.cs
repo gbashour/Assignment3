@@ -15,6 +15,10 @@ public class PacStudentController : MonoBehaviour
 
     List<Vector3> walkableTiles;
     Vector3 lerpDestination;
+    bool isRoundedUp;
+
+    float originalXPos;
+    float originalYPos;
 
     int[,] levelMap =
         {
@@ -42,6 +46,7 @@ public class PacStudentController : MonoBehaviour
         audioSource = GameObject.Find("Footsteps Sound Effect").GetComponent<AudioSource>();
         audioSource1 = GameObject.Find("Pellet Eating Sound Effect").GetComponent<AudioSource>();
         item.transform.position = new Vector3(-4.5f, 3.5f, 0.0f); // teleport PacStudent to left corner grid position if not there already
+        item.GetComponent<SpriteRenderer>().flipX = true; // face away from the wall
         walkableTiles = new List<Vector3>();
         particleEffect = GameObject.Find("Dust Particle Effect").GetComponent<ParticleSystem>();
 
@@ -52,20 +57,34 @@ public class PacStudentController : MonoBehaviour
     void Update()
     {
         // BUG FOUND: if user inputs a new key before halfway through lerp, it rounds down (Mathf.Round() rounds down if 0.1 - 0.5, up for 0.6 +)
-        // FIX: add a conditional to ensure always rounds up to grid position of next lerp ?
-        // always round to the position that they will be in???
-
-        //float originalPos = item.transform.position.x;
+        // FIX: add a conditional to ensure always rounds up to grid position of next lerp -- always round to the position that PacStudent WILL be in
 
         float x = item.transform.position.x + 0.5f;
         float y = item.transform.position.y + 0.5f;
         float xPos = Mathf.Round(x) - 0.5f;
         float yPos = Mathf.Round(y) - 0.5f;
-
-        //if (originalPos < -4.0f && originalPos > -4.5f) // this works but is hard coded -- need to make this dynamic ?
-        //{
-         //   xPos = -3.5f;
-       // }
+        // Error: invalid input before mid-lerp where it would be valid in the previous grid position is being allowed -- fix below:
+        /* if less than halfway through lerp */
+        if (originalXPos - xPos < 0.5f)
+        {
+            if (currentInput != KeyCode.A) // fix for moving in the positive direction
+            {
+                xPos = Mathf.Ceil(x) - 0.5f;
+            } else
+            {
+                xPos = Mathf.Floor(x) - 0.5f;
+            }
+        }
+        if (originalYPos - yPos < 0.5f)
+        {
+            if (currentInput != KeyCode.S)
+            {
+                yPos = Mathf.Ceil(y) - 0.5f;
+            } else
+            {
+                yPos = Mathf.Floor(y) - 0.5f;
+            }
+        }
 
         updateAudio(xPos, yPos);
         updateAnimation();
@@ -82,6 +101,8 @@ public class PacStudentController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.W)) // Move PacStudent Up
         {
             lastInput = KeyCode.W;
+            originalXPos = item.transform.position.x;
+            originalYPos = item.transform.position.y;
             if (isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
             {
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f);
@@ -92,6 +113,8 @@ public class PacStudentController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.A)) // Move PacStudent Left
         {
             lastInput = KeyCode.A;
+            originalXPos = item.transform.position.x;
+            originalYPos = item.transform.position.y;
             if (isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
             {
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
@@ -101,11 +124,11 @@ public class PacStudentController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.S)) // Move PacStudent Down
         {
-            Debug.Log("S was pressed");
             lastInput = KeyCode.S;
+            originalXPos = item.transform.position.x;
+            originalYPos = item.transform.position.y;
             if (isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f)))
             {
-                Debug.Log("I should not be lerping down");
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
                 lerpDestination = new Vector3(xPos, yPos - 1.0f, 0.0f);
                 currentInput = KeyCode.S;
@@ -113,8 +136,9 @@ public class PacStudentController : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.D)) // Move PacStudent Right
         {
-            Debug.Log("First key down D");
             lastInput = KeyCode.D;
+            originalXPos = item.transform.position.x;
+            originalYPos = item.transform.position.y;
             if (isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
             {
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
@@ -148,7 +172,6 @@ public class PacStudentController : MonoBehaviour
 
             if (lastInput == KeyCode.S && isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f))) // entering this if statement when it shouldnt be
             {
-                Debug.Log("NO");
                 currentInput = lastInput;
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
                 lerpDestination = new Vector3(xPos, yPos - 1.0f, 0.0f);
@@ -276,6 +299,7 @@ public class PacStudentController : MonoBehaviour
         }
         else
         {
+            animator.Play("IdleAnim", 0);
             return false;
         }
     }
@@ -298,7 +322,6 @@ public class PacStudentController : MonoBehaviour
             if (!animator.GetCurrentAnimatorStateInfo(0).IsName("UpWalking"))
             {
                 animator.Play("UpWalking", 0);
-                //particleEffect.transform.Rotate(-270.0f, 90.0f, -90.0f);
             }
         }
         if (currentInput == KeyCode.A)
@@ -306,7 +329,6 @@ public class PacStudentController : MonoBehaviour
             if (!animator.GetCurrentAnimatorStateInfo(0).IsName("LeftWalking"))
             {
                 animator.Play("LeftWalking", 0);
-                //particleEffect.transform.Rotate(0.0f, 90.0f, -90.0f);
             }
         }
         if (currentInput == KeyCode.S)
@@ -314,7 +336,6 @@ public class PacStudentController : MonoBehaviour
             if (!animator.GetCurrentAnimatorStateInfo(0).IsName("DownWalking"))
             {
                 animator.Play("DownWalking", 0);
-                //particleEffect.transform.Rotate(-90.0f, 90.0f, -90.0f);
             }
         }
         if (currentInput == KeyCode.D)
@@ -322,7 +343,6 @@ public class PacStudentController : MonoBehaviour
             if (!animator.GetCurrentAnimatorStateInfo(0).IsName("RightWalking"))
             {
                 animator.Play("RightWalking", 0);
-                //particleEffect.transform.Rotate(-180.0f, 90.0f, -90.0f);
             }
         }
         else
