@@ -77,32 +77,32 @@ public class CherryController : MonoBehaviour
             destination = new Vector3(centrePoint.x + centrePointDiff, centrePoint.y + (height / 2) + 1, 0.0f);
         }
         item.SetActive(true);
-        tweener.AddTween(item.transform, item.transform.position, centrePoint, 5.0f); // lerp to centre
+        tweener.AddTween(item.transform, item.transform.position, centrePoint, 3.0f); // lerp to centre
     }
 
     public void finalLerp()
     {
         if (item.transform.position == centrePoint) // once the bonus peach reaches the centre of the map
         {
-            tweener.AddTween(item.transform, centrePoint, destination, 5.0f); // lerp to other edge
+            tweener.AddTween(item.transform, centrePoint, destination, 3.0f); // lerp to other edge
         }
     }
 
     public void edgeCheck() // check if peach has completed lerp
     {
-        if (edge == 1 && item.transform.position.x == centrePoint.x + (width / 2) + 1)
+        if (edge == 1 && (item.transform.position.x == centrePoint.x + (width / 2) + 1))
         {
             item.SetActive(false);
         }
-        if (edge == 2 && item.transform.position.y == centrePoint.y - (height / 2) - 1)
+        if (edge == 2 && (item.transform.position.y == centrePoint.y - (height / 2) - 1))
         {
             item.SetActive(false);
         }
-        if (edge == 3 && item.transform.position.x == centrePoint.x - (width / 2) - 1)
+        if (edge == 3 && (item.transform.position.x == centrePoint.x - (width / 2) - 1))
         {
             item.SetActive(false);
         }
-        if (edge == 4 && item.transform.position.y == centrePoint.y + (height / 2) + 1)
+        if (edge == 4 && (item.transform.position.y == centrePoint.y + (height / 2) + 1))
         {
             item.SetActive(false);
         }
