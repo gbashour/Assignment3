@@ -56,6 +56,7 @@ public class PacStudentController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        //Debug.Log(item.transform.position);
         // BUG FOUND: if user inputs a new key before halfway through lerp, it rounds down (Mathf.Round() rounds down if 0.1 - 0.5, up for 0.6 +)
         // FIX: add a conditional to ensure always rounds up to grid position of next lerp -- always round to the position that PacStudent WILL be in
 
@@ -83,6 +84,23 @@ public class PacStudentController : MonoBehaviour
             } else
             {
                 yPos = Mathf.Floor(y) - 0.5f;
+            }
+        }
+        // slight lag when teleporting
+        if (yPos == -9.5f) // if along the tunnel where the teleporters are
+        {
+            Debug.Log("I am in a tunnel");
+            if (xPos == teleporters[0].x && currentInput == KeyCode.A) // left teleporter
+            {
+                Debug.Log("I am in the left teleporter");
+                item.transform.position = teleporters[1]; // teleport to right entry
+                checkCurrentInput(teleporters[1].x, -9.5f);
+            }
+            if (xPos == teleporters[1].x && currentInput == KeyCode.D) // right teleporter
+            {
+                Debug.Log("I am in the right teleporter");
+                item.transform.position = teleporters[0];
+                checkCurrentInput(teleporters[0].x, -9.5f);
             }
         }
 
@@ -162,6 +180,7 @@ public class PacStudentController : MonoBehaviour
 
             if (lastInput == KeyCode.A && isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
             {
+                Debug.Log("I am tweening in tp");
                 currentInput = lastInput;
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
                 lerpDestination = new Vector3(xPos - 1.0f, yPos, 0.0f);
@@ -188,25 +207,6 @@ public class PacStudentController : MonoBehaviour
             } else
             {
                 checkCurrentInput(xPos, yPos);
-            }
-
-            if (yPos == -9.5f) // if along the tunnel where the teleporters are
-            {
-                Debug.Log("I am in a tunnel");
-                if (xPos == teleporters[0].x) // left teleporter
-                {
-                    Debug.Log("I am in the left teleporter");
-                    item.transform.position = teleporters[1];
-                    tweener.AddTween(item.transform, item.transform.position, new Vector3(teleporters[1].x - 1.0f, yPos, 0.0f), 1.0f);
-                    currentInput = KeyCode.A;
-                }
-                if (xPos == teleporters[1].x) // right teleporter
-                {
-                    Debug.Log("I am in the right teleporter");
-                    item.transform.position = teleporters[0];
-                    tweener.AddTween(item.transform, item.transform.position, new Vector3(teleporters[1].x + 1.0f, yPos, 0.0f), 1.0f);
-                    currentInput = KeyCode.D;
-                }
             }
         }
     }
@@ -306,6 +306,7 @@ public class PacStudentController : MonoBehaviour
         }
         if (currentInput == KeyCode.A && isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
         {
+            Debug.Log("I should be moving");
             tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
             lerpDestination = new Vector3(xPos - 1.0f, yPos, 0.0f);
             return true;
