@@ -14,6 +14,7 @@ public class PacStudentController : MonoBehaviour
     public ParticleSystem particleEffect;
 
     List<Vector3> walkableTiles;
+    Vector3[] teleporters = { new Vector3(-5.5f, -9.5f, 0.0f), new Vector3(21.5f, -9.5f, 0.0f) }; // left and right side respectively
     Vector3 lerpDestination;
 
     float originalXPos;
@@ -187,6 +188,25 @@ public class PacStudentController : MonoBehaviour
             } else
             {
                 checkCurrentInput(xPos, yPos);
+            }
+
+            if (yPos == -9.5f) // if along the tunnel where the teleporters are
+            {
+                Debug.Log("I am in a tunnel");
+                if (xPos == teleporters[0].x) // left teleporter
+                {
+                    Debug.Log("I am in the left teleporter");
+                    item.transform.position = teleporters[1];
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(teleporters[1].x - 1.0f, yPos, 0.0f), 1.0f);
+                    currentInput = KeyCode.A;
+                }
+                if (xPos == teleporters[1].x) // right teleporter
+                {
+                    Debug.Log("I am in the right teleporter");
+                    item.transform.position = teleporters[0];
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(teleporters[1].x + 1.0f, yPos, 0.0f), 1.0f);
+                    currentInput = KeyCode.D;
+                }
             }
         }
     }
