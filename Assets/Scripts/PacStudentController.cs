@@ -12,6 +12,7 @@ public class PacStudentController : MonoBehaviour
     KeyCode currentInput;
     public Animator animator;
     public ParticleSystem particleEffect;
+    public ParticleSystem wallParticleEffect;
 
     List<Vector3> walkableTiles;
     Vector3[] teleporters = { new Vector3(-5.5f, -9.5f, 0.0f), new Vector3(21.5f, -9.5f, 0.0f) }; // left and right side respectively
@@ -49,6 +50,7 @@ public class PacStudentController : MonoBehaviour
         item.GetComponent<SpriteRenderer>().flipX = true; // face away from the wall
         walkableTiles = new List<Vector3>();
         particleEffect = GameObject.Find("Dust Particle Effect").GetComponent<ParticleSystem>();
+        wallParticleEffect = GameObject.Find("Wall Particle Effect").GetComponent<ParticleSystem>();
 
         nonWalkableTiles();
     }
@@ -180,7 +182,6 @@ public class PacStudentController : MonoBehaviour
 
             if (lastInput == KeyCode.A && isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
             {
-                Debug.Log("I am tweening in tp");
                 currentInput = lastInput;
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
                 lerpDestination = new Vector3(xPos - 1.0f, yPos, 0.0f);
@@ -306,7 +307,6 @@ public class PacStudentController : MonoBehaviour
         }
         if (currentInput == KeyCode.A && isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
         {
-            Debug.Log("I should be moving");
             tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
             lerpDestination = new Vector3(xPos - 1.0f, yPos, 0.0f);
             return true;
@@ -326,6 +326,7 @@ public class PacStudentController : MonoBehaviour
         else
         {
             animator.Play("IdleAnim", 0);
+            wallParticleEffect.Play();
             return false;
         }
     }
@@ -374,6 +375,11 @@ public class PacStudentController : MonoBehaviour
         else
         {
             // Do something else in future for Dead State
+        }
+        // Colliding with a wall particle system updater
+        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("IdleAnim"))
+        {
+            wallParticleEffect.Stop();
         }
     }
 }
