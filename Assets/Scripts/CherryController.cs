@@ -16,8 +16,8 @@ public class CherryController : MonoBehaviour
     int edge;
 
     // use PeachScore as a property so it can be accessed by UIManager (and SaveGameManager in future)
-    private int peachScore = 0;
-    public int PeachScore
+    private static int peachScore = 0;
+    public static int PeachScore
     {
         get { return peachScore; }
     }
@@ -25,6 +25,7 @@ public class CherryController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        peachScore = 0;
         tweener = gameObject.GetComponent<Tweener>();
         // Get random location just outside camera view
         cameraView = Camera.main; // get main camera

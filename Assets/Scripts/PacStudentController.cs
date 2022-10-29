@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class PacStudentController : MonoBehaviour
 {
@@ -17,6 +18,14 @@ public class PacStudentController : MonoBehaviour
     List<Vector3> walkableTiles;
     Vector3[] teleporters = { new Vector3(-5.5f, -9.5f, 0.0f), new Vector3(21.5f, -9.5f, 0.0f) }; // left and right side respectively
     Vector3 lerpDestination;
+    public Tilemap tilemap;
+
+    // use PacStudentScore as a property so it can be accessed by UIManager (and SaveGameManager in future)
+    private static int pacStudentScore = 0;
+    public static int PacStudentScore
+    {
+        get { return pacStudentScore; }
+    }
 
     float originalXPos;
     float originalYPos;
@@ -51,8 +60,10 @@ public class PacStudentController : MonoBehaviour
         walkableTiles = new List<Vector3>();
         particleEffect = GameObject.Find("Dust Particle Effect").GetComponent<ParticleSystem>();
         wallParticleEffect = GameObject.Find("Wall Particle Effect").GetComponent<ParticleSystem>();
-
+        tilemap = GameObject.Find("Tilemap").GetComponent<Tilemap>();
         nonWalkableTiles();
+
+        pacStudentScore = 0;
     }
 
     // Update is called once per frame
@@ -126,7 +137,8 @@ public class PacStudentController : MonoBehaviour
             if (isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
             {
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f);
-                lerpDestination = new Vector3(xPos, yPos + 1.0f, 0.0f);
+                lerpDestination = new Vector3(xPos, yPos, 0.0f);
+                checkTile(lerpDestination);
                 currentInput = KeyCode.W;
             }
         }
@@ -138,7 +150,8 @@ public class PacStudentController : MonoBehaviour
             if (isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
             {
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
-                lerpDestination = new Vector3(xPos - 1.0f, yPos, 0.0f);
+                lerpDestination = new Vector3(xPos, yPos, 0.0f);
+                checkTile(lerpDestination);
                 currentInput = KeyCode.A;
             }
         }
@@ -150,7 +163,8 @@ public class PacStudentController : MonoBehaviour
             if (isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f)))
             {
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
-                lerpDestination = new Vector3(xPos, yPos - 1.0f, 0.0f);
+                lerpDestination = new Vector3(xPos, yPos, 0.0f);
+                checkTile(lerpDestination);
                 currentInput = KeyCode.S;
             }
         }
@@ -162,7 +176,8 @@ public class PacStudentController : MonoBehaviour
             if (isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
             {
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
-                lerpDestination = new Vector3(xPos + 1.0f, yPos, 0.0f);
+                lerpDestination = new Vector3(xPos, yPos, 0.0f);
+                checkTile(lerpDestination);
                 currentInput = KeyCode.D;
             }
         }
@@ -173,7 +188,8 @@ public class PacStudentController : MonoBehaviour
             {
                 currentInput = lastInput;
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f);
-                lerpDestination = new Vector3(xPos, yPos + 1.0f, 0.0f);
+                lerpDestination = new Vector3(xPos, yPos, 0.0f);
+                checkTile(lerpDestination);
             }
             else
             {
@@ -184,7 +200,8 @@ public class PacStudentController : MonoBehaviour
             {
                 currentInput = lastInput;
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
-                lerpDestination = new Vector3(xPos - 1.0f, yPos, 0.0f);
+                lerpDestination = new Vector3(xPos, yPos, 0.0f);
+                checkTile(lerpDestination);
             } else
             {
                 checkCurrentInput(xPos, yPos);
@@ -194,7 +211,8 @@ public class PacStudentController : MonoBehaviour
             {
                 currentInput = lastInput;
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
-                lerpDestination = new Vector3(xPos, yPos - 1.0f, 0.0f);
+                lerpDestination = new Vector3(xPos, yPos, 0.0f);
+                checkTile(lerpDestination);
             } else
             {
                 checkCurrentInput(xPos, yPos);
@@ -204,7 +222,8 @@ public class PacStudentController : MonoBehaviour
             {
                 currentInput = lastInput;
                 tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
-                lerpDestination = new Vector3(xPos + 1.0f, yPos, 0.0f);
+                lerpDestination = new Vector3(xPos, yPos, 0.0f);
+                checkTile(lerpDestination);
             } else
             {
                 checkCurrentInput(xPos, yPos);
@@ -302,29 +321,36 @@ public class PacStudentController : MonoBehaviour
         if (currentInput == KeyCode.W && isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
         {
             tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f); // try to move in direction of currentInput
-            lerpDestination = new Vector3(xPos, yPos + 1.0f, 0.0f);
+            lerpDestination = new Vector3(xPos, yPos, 0.0f);
+            checkTile(lerpDestination);
             return true;
         }
         if (currentInput == KeyCode.A && isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
         {
             tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
-            lerpDestination = new Vector3(xPos - 1.0f, yPos, 0.0f);
+            lerpDestination = new Vector3(xPos, yPos, 0.0f);
+            checkTile(lerpDestination);
             return true;
         }
         if (currentInput == KeyCode.S && isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f)))
         {
             tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
-            lerpDestination = new Vector3(xPos, yPos - 1.0f, 0.0f);
+            lerpDestination = new Vector3(xPos, yPos, 0.0f);
+            checkTile(lerpDestination);
             return true;
         }
         if (currentInput == KeyCode.D && isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
         {
             tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
-            lerpDestination = new Vector3(xPos + 1.0f, yPos, 0.0f);
+            lerpDestination = new Vector3(xPos, yPos, 0.0f);
+            checkTile(lerpDestination);
             return true;
         }
         else
         {
+            lerpDestination = new Vector3(xPos, yPos, 0.0f);
+            checkTile(lerpDestination);
+
             animator.Play("IdleAnim", 0);
             wallParticleEffect.Play();
             return false;
@@ -380,6 +406,23 @@ public class PacStudentController : MonoBehaviour
         if (!animator.GetCurrentAnimatorStateInfo(0).IsName("IdleAnim"))
         {
             wallParticleEffect.Stop();
+        }
+    }
+
+    public void checkTile(Vector3 lerpDestination)
+    {
+        //int xPos = (int)Mathf.Ceil(lerpDestination.x);
+        //int yPos = (int)Mathf.Ceil(lerpDestination.y);
+        //Vector3Int lerpTile = new Vector3Int(xPos, yPos, 0);
+        Vector3Int lerpTile = tilemap.WorldToCell(lerpDestination);
+        if (tilemap.GetTile(lerpTile) == null)
+        {
+            // play footsteps audio instead of pellet eating audio
+        }
+        else
+        {
+            tilemap.SetTile(lerpTile, null); // destroy the tile
+            pacStudentScore += 10; // add 10 to the score
         }
     }
 }

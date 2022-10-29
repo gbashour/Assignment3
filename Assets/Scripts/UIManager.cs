@@ -6,6 +6,7 @@ using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour
 {
+    public TMPro.TextMeshProUGUI score;
     public TMPro.TextMeshProUGUI gameTimer;
     float timer;
     int minutes, seconds, milliseconds;
@@ -36,6 +37,10 @@ public class UIManager : MonoBehaviour
         if (SceneManager.GetActiveScene().buildIndex == 0) // if Level1Scene is the active scene
         {
             gameTimer.text = "Timer: " + minutes + ":" + seconds + ":" + milliseconds; // update the timer every frame
+            int totalScore = PacStudentController.PacStudentScore + CherryController.PeachScore; // store total score in separate variable because otherwise it just concatenates them like strings
+            score.text = "Score: " + totalScore; // update score every frame
+            Debug.Log(PacStudentController.PacStudentScore);
+            Debug.Log(CherryController.PeachScore);
         }
     }
 
@@ -54,6 +59,7 @@ public class UIManager : MonoBehaviour
             button.onClick.AddListener(ExitGame);
 
             gameTimer = GameObject.FindGameObjectWithTag("GameTimer").GetComponent<TMPro.TextMeshProUGUI>();
+            score = GameObject.Find("Score").GetComponent<TMPro.TextMeshProUGUI>();
         }
     }
 
