@@ -15,6 +15,13 @@ public class CherryController : MonoBehaviour
     float width;
     int edge;
 
+    // use PeachScore as a property so it can be accessed by UIManager (and SaveGameManager in future)
+    private int peachScore = 0;
+    public int PeachScore
+    {
+        get { return peachScore; }
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -105,6 +112,15 @@ public class CherryController : MonoBehaviour
         if (edge == 4 && (item.transform.position.y == centrePoint.y + (height / 2) + 1))
         {
             item.SetActive(false);
+        }
+    }
+
+    public void OnTriggerEnter(Collider other) // if collides with PacStudent
+    {
+        if (other.gameObject.name.Equals("PacStudent"))
+        {
+            item.SetActive(false);
+            peachScore += 100; // add 100 to peachScore
         }
     }
 }
