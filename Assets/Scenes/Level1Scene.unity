@@ -373,6 +373,7 @@ GameObject:
   - component: {fileID: 289957449}
   - component: {fileID: 289957448}
   - component: {fileID: 289957450}
+  - component: {fileID: 289957451}
   m_Layer: 0
   m_Name: PurpleGhost
   m_TagString: Untagged
@@ -468,6 +469,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!65 &289957451
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 289957447}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &314813463
 GameObject:
   m_ObjectHideFlags: 0
@@ -686,6 +700,7 @@ GameObject:
   - component: {fileID: 431135790}
   - component: {fileID: 431135789}
   - component: {fileID: 431135791}
+  - component: {fileID: 431135792}
   m_Layer: 0
   m_Name: GreenGhost
   m_TagString: Untagged
@@ -781,6 +796,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!65 &431135792
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 431135788}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &494398148
 GameObject:
   m_ObjectHideFlags: 0
@@ -792,6 +820,7 @@ GameObject:
   - component: {fileID: 494398150}
   - component: {fileID: 494398149}
   - component: {fileID: 494398151}
+  - component: {fileID: 494398152}
   m_Layer: 0
   m_Name: RedGhost
   m_TagString: Untagged
@@ -887,6 +916,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!65 &494398152
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 494398148}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &496902740
 GameObject:
   m_ObjectHideFlags: 0
@@ -13057,6 +13099,7 @@ GameObject:
   - component: {fileID: 1578736480}
   - component: {fileID: 1578736479}
   - component: {fileID: 1578736481}
+  - component: {fileID: 1578736482}
   m_Layer: 0
   m_Name: BlueGhost
   m_TagString: Untagged
@@ -13152,6 +13195,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!65 &1578736482
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1578736478}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 1, z: 0.2}
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &1601808637
 GameObject:
   m_ObjectHideFlags: 0
@@ -13271,7 +13327,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &1723855399
 RectTransform:
   m_ObjectHideFlags: 0
@@ -18408,7 +18464,7 @@ BoxCollider:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1926445512}
   m_Material: {fileID: 0}
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 0.2}

@@ -29,6 +29,9 @@ public class PacStudentController : MonoBehaviour
     Vector3[] powerPellets = { new Vector3(-4.5f, 1.5f, 0.0f), new Vector3(20.5f, 1.5f, 0.0f), new Vector3(-4.5f, 20.5f, 0.0f), new Vector3(20.5f, -20.5f, 0.0f) }; // can potentially add this in nonWalkableTiles method where = 4
 
     int counter = 0;
+    int powerPellet;
+    float timer;
+    int lastTime;
 
     // use PacStudentScore as a property so it can be accessed by UIManager (and SaveGameManager in future)
     private static int pacStudentScore = 0;
@@ -37,7 +40,7 @@ public class PacStudentController : MonoBehaviour
         get { return pacStudentScore; }
     }
 
-    private static int ghostTimer = 10;
+    private static int ghostTimer = 11;
     public static int GhostTimer
     {
         get { return ghostTimer; }
@@ -135,68 +138,7 @@ public class PacStudentController : MonoBehaviour
             }
         }
 
-        /* Check Power Pellets */
-        for (int i = 0; i < powerPellets.Length; i++)
-        {
-            if (lerpDestination == powerPellets[i])
-            {
-                audioSource3.Stop();
-                if (!audioSource4.isPlaying)
-                {
-                    audioSource4.Play();
-                }
-
-                if (ghostTimer == 3)
-                {
-                    // Recovery state
-                }
-                //if (ghostTimer == )
-
-                if (!ghostAnimator1.GetCurrentAnimatorStateInfo(0).IsName("Scared"))
-                {
-                    ghostAnimator1.Play("Scared", 0);
-                }
-                if (!ghostAnimator2.GetCurrentAnimatorStateInfo(0).IsName("Scared"))
-                {
-                    ghostAnimator2.Play("Scared", 0);
-                }
-                if (!ghostAnimator3.GetCurrentAnimatorStateInfo(0).IsName("Scared"))
-                {
-                    ghostAnimator3.Play("Scared", 0);
-                }
-                if (!ghostAnimator4.GetCurrentAnimatorStateInfo(0).IsName("Scared"))
-                {
-                    ghostAnimator4.Play("Scared", 0);
-                }
-                // updating the score here was glitching it out -- conditional was true for a long time
-                if (powerPellets[i].x == -4.5f)
-                {
-                    if (powerPellets[i].y == 1.5f)
-                    {
-                        Destroy(GameObject.FindGameObjectWithTag("PelletOne"));
-                        break;
-                    }
-                    else
-                    {
-                        Destroy(GameObject.FindGameObjectWithTag("PelletThree"));
-                        break;
-                    }
-                }
-                if (powerPellets[i].x == 20.5f)
-                {
-                    if (powerPellets[i].y == 1.5f)
-                    {
-                        Destroy(GameObject.FindGameObjectWithTag("PelletTwo"));
-                        break;
-                    }
-                    else
-                    {
-                        Destroy(GameObject.FindGameObjectWithTag("PelletFour"));
-                        break;
-                    }
-                }
-            }
-        }
+        pelletsAndGhosts();
 
         updateAudio(xPos, yPos);
         updateAnimation();
@@ -446,10 +388,12 @@ public class PacStudentController : MonoBehaviour
             if (!audioSource2.isPlaying && counter == 0)
             {
                 audioSource2.Play(); // problem is that its repeating -- this should only play once
-                wallParticleEffect.Play();
+                //wallParticleEffect.Play();
+                wallParticleEffect.Emit(1000); // changes emission shape/look, but only plays once (because its emitting 1000 particles in a burst)
                 counter++;
             }
         }
+
         if (checkCurrentInput(xPos, yPos))
         {
             counter = 0;
@@ -498,17 +442,6 @@ public class PacStudentController : MonoBehaviour
         {
             // Do something else in future for Dead State
         }
-        // Colliding with a wall particle system updater
-        /*if (!animator.GetCurrentAnimatorStateInfo(0).IsName("IdleAnim"))
-        {
-            Debug.Log("I am not idle");
-            wallParticleEffect.Stop();
-        }
-        if (animator.GetCurrentAnimatorStateInfo(0).IsName("IdleAnim"))
-        {
-            Debug.Log("I am idle");
-            wallParticleEffect.Play();
-        }*/
     }
 
     public bool checkTile(Vector3 lerpDestination) // returns true if pellet is destroyed
@@ -533,6 +466,104 @@ public class PacStudentController : MonoBehaviour
             }
             pacStudentScore += 10; // add 10 to the score
             return true;
+        }
+    }
+
+    public void pelletsAndGhosts()
+    {
+        /* Check Power Pellets */
+        for (int i = 0; i < powerPellets.Length; i++)
+        {
+            if (lerpDestination == powerPellets[i])
+            {
+                audioSource3.Stop();
+                if (!audioSource4.isPlaying)
+                {
+                    audioSource4.Play();
+                }
+
+                if (!ghostAnimator1.GetCurrentAnimatorStateInfo(0).IsName("Scared"))
+                {
+                    ghostAnimator1.Play("Scared", 0);
+                }
+                if (!ghostAnimator2.GetCurrentAnimatorStateInfo(0).IsName("Scared"))
+                {
+                    ghostAnimator2.Play("Scared", 0);
+                }
+                if (!ghostAnimator3.GetCurrentAnimatorStateInfo(0).IsName("Scared"))
+                {
+                    ghostAnimator3.Play("Scared", 0);
+                }
+                if (!ghostAnimator4.GetCurrentAnimatorStateInfo(0).IsName("Scared"))
+                {
+                    ghostAnimator4.Play("Scared", 0);
+                }
+                // updating the score here was glitching it out -- conditional was true for a long time
+                if (powerPellets[i].x == -4.5f)
+                {
+                    if (powerPellets[i].y == 1.5f)
+                    {
+                        Destroy(GameObject.FindGameObjectWithTag("PelletOne"));
+                        powerPellet = 1;
+                        break;
+                    }
+                    else
+                    {
+                        Destroy(GameObject.FindGameObjectWithTag("PelletThree"));
+                        powerPellet = 3;
+                        break;
+                    }
+                }
+                if (powerPellets[i].x == 20.5f)
+                {
+                    if (powerPellets[i].y == 1.5f)
+                    {
+                        Destroy(GameObject.FindGameObjectWithTag("PelletTwo"));
+                        powerPellet = 2;
+                        break;
+                    }
+                    else
+                    {
+                        Destroy(GameObject.FindGameObjectWithTag("PelletFour"));
+                        powerPellet = 4;
+                        break;
+                    }
+                }
+            }
+        }
+        if (powerPellet != 0)
+        {
+            ghostTimerUpdater();
+        }
+    }
+
+    public void ghostTimerUpdater()
+    {
+        timer += Time.deltaTime;
+        if ((int)timer - lastTime == 1)
+        {
+            ghostTimer--; // decrement every second
+            lastTime = (int)timer;
+            Debug.Log("Decrementing");
+        }
+
+        if (ghostTimer == 3)
+        {
+            ghostAnimator1.Play("Recovery", 0); // play recovery states (can change manner that animations are being done at a later stage)
+            ghostAnimator2.Play("Recovery", 0);
+            ghostAnimator3.Play("Recovery", 0);
+            ghostAnimator4.Play("Recovery", 0);
+        }
+
+        if (ghostTimer < 0)
+        {
+            Debug.Log("10 seconds is up");
+            powerPellet = 0;
+            ghostTimer = 11;
+            ghostAnimator1.Play("LeftWalking", 0); // normal walking states (left is default, placeholder here for now)
+            ghostAnimator2.Play("LeftWalking", 0);
+            ghostAnimator3.Play("LeftWalking", 0);
+            ghostAnimator4.Play("LeftWalking", 0);
         }
     }
 }

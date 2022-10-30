@@ -8,6 +8,7 @@ public class UIManager : MonoBehaviour
 {
     public TMPro.TextMeshProUGUI score;
     public TMPro.TextMeshProUGUI gameTimer;
+    public TMPro.TextMeshProUGUI ghostScaredTimer;
     float timer;
     int minutes, seconds, milliseconds;
     /* Text type throws a Null Reference Exception, doesn't register TextMeshPro as type Text */
@@ -39,8 +40,16 @@ public class UIManager : MonoBehaviour
             gameTimer.text = "Timer: " + minutes + ":" + seconds + ":" + milliseconds; // update the timer every frame
             int totalScore = PacStudentController.PacStudentScore + CherryController.PeachScore; // store total score in separate variable because otherwise it just concatenates them like strings
             score.text = "Score: " + totalScore; // update score every frame
-            Debug.Log(PacStudentController.PacStudentScore);
-            Debug.Log(CherryController.PeachScore);
+            //Debug.Log(PacStudentController.PacStudentScore);
+            //Debug.Log(CherryController.PeachScore);
+            if (PacStudentController.GhostTimer < 11 && PacStudentController.GhostTimer > -1)
+            {
+                ghostScaredTimer.text = PacStudentController.GhostTimer + " seconds";
+
+            } else
+            {
+                ghostScaredTimer.text = "";
+            }
         }
     }
 
@@ -60,6 +69,7 @@ public class UIManager : MonoBehaviour
 
             gameTimer = GameObject.FindGameObjectWithTag("GameTimer").GetComponent<TMPro.TextMeshProUGUI>();
             score = GameObject.Find("Score").GetComponent<TMPro.TextMeshProUGUI>();
+            ghostScaredTimer = GameObject.Find("Ghost Scared Timer").GetComponent<TMPro.TextMeshProUGUI>();
         }
     }
 
