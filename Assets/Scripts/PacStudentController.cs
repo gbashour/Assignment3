@@ -28,6 +28,8 @@ public class PacStudentController : MonoBehaviour
     public Tilemap tilemap;
     Vector3[] powerPellets = { new Vector3(-4.5f, 1.5f, 0.0f), new Vector3(20.5f, 1.5f, 0.0f), new Vector3(-4.5f, 20.5f, 0.0f), new Vector3(20.5f, -20.5f, 0.0f) }; // can potentially add this in nonWalkableTiles method where = 4
 
+    int counter = 0;
+
     // use PacStudentScore as a property so it can be accessed by UIManager (and SaveGameManager in future)
     private static int pacStudentScore = 0;
     public static int PacStudentScore
@@ -441,31 +443,18 @@ public class PacStudentController : MonoBehaviour
         {
             audioSource.Stop();
             audioSource1.Stop();
-            if (!audioSource2.isPlaying)
+            if (!audioSource2.isPlaying && counter == 0)
             {
                 audioSource2.Play(); // problem is that its repeating -- this should only play once
                 wallParticleEffect.Play();
+                counter++;
             }
         }
-
-        /*if (checkTile(lerpDestination))
+        if (checkCurrentInput(xPos, yPos))
         {
-            if (!audioSource1.isPlaying)
-            {
-                audioSource.Stop();
-                audioSource1.Play();
-            }
+            counter = 0;
+            wallParticleEffect.Stop();
         }
-
-        if (!checkTile(lerpDestination))
-        {
-            if (!audioSource.isPlaying)
-            {
-                audioSource1.Stop();
-                audioSource.Play();
-            }
-        }*/
-
         if (!audioSource4.isPlaying)
         {
             if (!audioSource3.isPlaying)
@@ -510,10 +499,16 @@ public class PacStudentController : MonoBehaviour
             // Do something else in future for Dead State
         }
         // Colliding with a wall particle system updater
-        if (!animator.GetCurrentAnimatorStateInfo(0).IsName("IdleAnim"))
+        /*if (!animator.GetCurrentAnimatorStateInfo(0).IsName("IdleAnim"))
         {
+            Debug.Log("I am not idle");
             wallParticleEffect.Stop();
         }
+        if (animator.GetCurrentAnimatorStateInfo(0).IsName("IdleAnim"))
+        {
+            Debug.Log("I am idle");
+            wallParticleEffect.Play();
+        }*/
     }
 
     public bool checkTile(Vector3 lerpDestination) // returns true if pellet is destroyed
