@@ -21,17 +21,23 @@ public class PacStudentController : MonoBehaviour
     public Animator ghostAnimator4;
     public ParticleSystem particleEffect;
     public ParticleSystem wallParticleEffect;
+    public ParticleSystem deathParticleEffect;
 
     List<Vector3> walkableTiles;
     Vector3[] teleporters = { new Vector3(-5.5f, -9.5f, 0.0f), new Vector3(21.5f, -9.5f, 0.0f) }; // left and right side respectively
     Vector3 lerpDestination;
     public Tilemap tilemap;
     Vector3[] powerPellets = { new Vector3(-4.5f, 1.5f, 0.0f), new Vector3(20.5f, 1.5f, 0.0f), new Vector3(-4.5f, 20.5f, 0.0f), new Vector3(20.5f, -20.5f, 0.0f) }; // can potentially add this in nonWalkableTiles method where = 4
+    List<GameObject> lives;
 
     int counter = 0;
     int powerPellet;
     float timer;
     int lastTime;
+    int pelletNumber;
+
+    //const string saveHighScore = "High Score";
+    //const string saveTime = "Time";
 
     // use PacStudentScore as a property so it can be accessed by UIManager (and SaveGameManager in future)
     private static int pacStudentScore = 0;
@@ -44,6 +50,12 @@ public class PacStudentController : MonoBehaviour
     public static int GhostTimer
     {
         get { return ghostTimer; }
+    }
+
+    private static bool gameOver = false;
+    public static bool GameOver
+    {
+        get { return gameOver; }
     }
 
     float originalXPos;
@@ -84,10 +96,15 @@ public class PacStudentController : MonoBehaviour
         walkableTiles = new List<Vector3>();
         particleEffect = GameObject.Find("Dust Particle Effect").GetComponent<ParticleSystem>();
         wallParticleEffect = GameObject.Find("Wall Particle Effect").GetComponent<ParticleSystem>();
+        deathParticleEffect = GameObject.Find("Death Particle Effect").GetComponent<ParticleSystem>();
         tilemap = GameObject.Find("Tilemap").GetComponent<Tilemap>();
         nonWalkableTiles();
 
         pacStudentScore = 0;
+        lives = new List<GameObject>();
+        lives.Add(GameObject.Find("Life Indicator"));
+        lives.Add(GameObject.Find("Life Indicator 1"));
+        lives.Add(GameObject.Find("Life Indicator 2"));
     }
 
     // Update is called once per frame
@@ -96,8 +113,13 @@ public class PacStudentController : MonoBehaviour
         //Debug.Log(item.transform.position);
         // BUG FOUND: if user inputs a new key before halfway through lerp, it rounds down (Mathf.Round() rounds down if 0.1 - 0.5, up for 0.6 +)
         // FIX: add a conditional to ensure always rounds up to grid position of next lerp -- always round to the position that PacStudent WILL be in
-        if (UIManager.RoundStart)
+        if (UIManager.RoundStart) // TO ADD: if !gameOver
         {
+            if (pelletNumber == 0 || lives.Count == 0) // if no pellets left OR lives are gone
+            {
+                gameOver = true;
+            }
+
             float x = item.transform.position.x + 0.5f;
             float y = item.transform.position.y + 0.5f;
             float xPos = Mathf.Round(x) - 0.5f;
@@ -278,6 +300,10 @@ public class PacStudentController : MonoBehaviour
                 {
                     walkableTiles.Add(placement); // add position to walkabletiles
                 }
+                if (levelMap[i, j] == 5 || levelMap[i, j] == 6)
+                {
+                    pelletNumber++;
+                }
                 placement = new Vector3(placement.x + 1.0f, placement.y, 0.0f); // next tile to the right, no change in y value
             }
             placement = new Vector3(-5.5f, placement.y - 1.0f, 0.0f); // next row on the grid, change in y value
@@ -292,6 +318,10 @@ public class PacStudentController : MonoBehaviour
                 if (levelMap[i, j] == 1 || levelMap[i, j] == 2 || levelMap[i, j] == 3 || levelMap[i, j] == 4 || levelMap[i, j] == 7)
                 {
                     walkableTiles.Add(placement);
+                }
+                if (levelMap[i, j] == 5 || levelMap[i, j] == 6)
+                {
+                    pelletNumber++;
                 }
                 placement = new Vector3(placement.x + 1.0f, placement.y, 0.0f); // next tile to the right, no change in y value
             }
@@ -308,6 +338,10 @@ public class PacStudentController : MonoBehaviour
                 {
                     walkableTiles.Add(placement);
                 }
+                if (levelMap[i, j] == 5 || levelMap[i, j] == 6)
+                {
+                    pelletNumber++;
+                }
                 placement = new Vector3(placement.x + 1.0f, placement.y, 0.0f); // next tile to the right, no change in y value
             }
             placement = new Vector3(-5.5f, placement.y + 1.0f, 0.0f); // next row on the grid, change in y value
@@ -322,6 +356,10 @@ public class PacStudentController : MonoBehaviour
                 if (levelMap[i, j] == 1 || levelMap[i, j] == 2 || levelMap[i, j] == 3 || levelMap[i, j] == 4 || levelMap[i, j] == 7)
                 {
                     walkableTiles.Add(placement);
+                }
+                if (levelMap[i, j] == 5 || levelMap[i, j] == 6)
+                {
+                    pelletNumber++;
                 }
                 placement = new Vector3(placement.x + 1.0f, placement.y, 0.0f); // next tile to the right, no change in y value
             }
@@ -473,6 +511,7 @@ public class PacStudentController : MonoBehaviour
                 audioSource1.Play();
             }
             pacStudentScore += 10; // add 10 to the score
+            pelletNumber--; // one less pellet
             return true;
         }
     }
@@ -568,10 +607,36 @@ public class PacStudentController : MonoBehaviour
             Debug.Log("10 seconds is up");
             powerPellet = 0;
             ghostTimer = 11;
+            audioSource4.Stop();
+            if (!audioSource3.isPlaying)
+            {
+                audioSource3.Play();
+            }
             ghostAnimator1.Play("LeftWalking", 0); // normal walking states (left is default, placeholder here for now)
             ghostAnimator2.Play("LeftWalking", 0);
             ghostAnimator3.Play("LeftWalking", 0);
             ghostAnimator4.Play("LeftWalking", 0);
         }
+    }
+
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.name.Equals("RedGhost") || other.gameObject.name.Equals("GreenGhost") || other.gameObject.name.Equals("BlueGhost") || other.gameObject.name.Equals("PurpleGhost"))
+        {
+            if (ghostTimer == 11) // if not in scared or recovery state
+            {
+                GameObject lifeLost = lives[lives.Count - 1];
+                lives.RemoveAt(lives.Count - 1);
+                Destroy(lifeLost);
+                // play death particle effect
+                // play pacstudent dead state
+                // set item.transform.position back to new Vector3(-4.5f, 3.5f, 0.0f) and reset currentInput and lastInput
+            }
+        }
+        /* IF COLLIDING DURING SCARED OR RECOVERY */
+        // update background music similar to normal -> scared
+        // pacStudentScore += 300
+        // start 5 second timer, similar to how 10 second ghostTimer was implemented 
+        // when timer < 0, switch ghost animators all back to walking state
     }
 }

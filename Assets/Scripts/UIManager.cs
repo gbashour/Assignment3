@@ -10,12 +10,18 @@ public class UIManager : MonoBehaviour
     public TMPro.TextMeshProUGUI gameTimer;
     public TMPro.TextMeshProUGUI ghostScaredTimer;
     public TMPro.TextMeshProUGUI roundTimer;
-    float timer, startTimer;
+    public TMPro.TextMeshProUGUI gameOver;
+    float timer, startTimer, newTimer;
     int minutes, seconds, milliseconds;
-    int lastTime = 0, countdown = 3;
+    int lastTime = 0, countdown = 3, endLastTime = 0;
+    int totalScore;
+    int milliTimer;
     /* Text type throws a Null Reference Exception, doesn't register TextMeshPro as type Text */
     public TMPro.TextMeshProUGUI highScore; // after testing, figured out that the type "Text" doesn't work because I'm using TextMeshPro
     public TMPro.TextMeshProUGUI time;
+
+    const string saveHighScore = "High Score";
+    const string saveTime = "Time";
 
     private static bool roundStart = false;
     public static bool RoundStart
@@ -27,10 +33,20 @@ public class UIManager : MonoBehaviour
     void Start()
     {
         highScore = GameObject.Find("HighScore").GetComponent<TMPro.TextMeshProUGUI>();
-        // highScore.text = "Test"; // it works! -- still need to implement PlayerPrefs
+        highScore.text = "High Score: " + PlayerPrefs.GetInt(saveHighScore).ToString(); // -- still need to implement PlayerPrefs
 
         time = GameObject.Find("Time").GetComponent<TMPro.TextMeshProUGUI>();
-        // time.text = "Time: " + PlayerPrefs.GetFloat(); -- to be implemented
+        int highScoreTimer = PlayerPrefs.GetInt(saveTime);
+        if (highScoreTimer == 0)
+        {
+            time.text = "Time: 00:00:00";
+        } else
+        {
+            minutes = highScoreTimer / 60000; // how many minutes = total milliseconds / 60000
+            seconds = (int)timer - (minutes * 60);
+            milliseconds = (highScoreTimer - (minutes * 60000) - (seconds * 1000)) / 10;
+            time.text = "Time: " + minutes + ":" + seconds + ":" + milliseconds;
+        }
     }
 
     // Update is called once per frame
@@ -43,12 +59,12 @@ public class UIManager : MonoBehaviour
             {
                 /* GAME TIMER */
                 timer += Time.deltaTime; // this is in seconds
-                int milliTimer = (int)(timer * 1000.0f); // total milliseconds
+                milliTimer = (int)(timer * 1000.0f); // total milliseconds
                 minutes = milliTimer / 60000; // how many minutes = total milliseconds / 60000
                 seconds = (int)timer - (minutes * 60);
                 milliseconds = (milliTimer - (minutes * 60000) - (seconds * 1000)) / 10;
                 gameTimer.text = "Timer: " + minutes + ":" + seconds + ":" + milliseconds; // update the timer every frame
-                int totalScore = PacStudentController.PacStudentScore + CherryController.PeachScore; // store total score in separate variable because otherwise it just concatenates them like strings
+                totalScore = PacStudentController.PacStudentScore + CherryController.PeachScore; // store total score in separate variable because otherwise it just concatenates them like strings
                 score.text = "Score: " + totalScore; // update score every frame
                 if (PacStudentController.GhostTimer < 11 && PacStudentController.GhostTimer > -1)
                 {
@@ -77,6 +93,28 @@ public class UIManager : MonoBehaviour
                 {
                     roundTimer.text = "";
                     roundStart = true;
+                }
+            }
+
+            if (PacStudentController.GameOver)
+            {
+                newTimer += Time.deltaTime;
+                gameOver.text = "Game Over";
+                if ((int)newTimer - endLastTime == 1)
+                {
+                    endLastTime = (int)newTimer;
+                    if (endLastTime == 4)
+                    {
+                        gameOver.text = "";
+                    }
+                }
+                int saveValue = totalScore;
+                int loadValue = PlayerPrefs.GetInt(saveHighScore);
+                if (saveValue > loadValue) // if current score is greater than saved score
+                {
+                    PlayerPrefs.SetInt(saveHighScore, saveValue);
+                    PlayerPrefs.SetInt(saveTime, milliTimer);
+                    PlayerPrefs.Save();
                 }
             }
         }
