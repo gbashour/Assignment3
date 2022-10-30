@@ -9,9 +9,16 @@ public class PacStudentController : MonoBehaviour
     [SerializeField] private GameObject item;
     public AudioSource audioSource;
     public AudioSource audioSource1;
+    public AudioSource audioSource2;
+    public AudioSource audioSource3;
+    public AudioSource audioSource4;
     KeyCode lastInput;
     KeyCode currentInput;
     public Animator animator;
+    public Animator ghostAnimator1;
+    public Animator ghostAnimator2;
+    public Animator ghostAnimator3;
+    public Animator ghostAnimator4;
     public ParticleSystem particleEffect;
     public ParticleSystem wallParticleEffect;
 
@@ -19,12 +26,19 @@ public class PacStudentController : MonoBehaviour
     Vector3[] teleporters = { new Vector3(-5.5f, -9.5f, 0.0f), new Vector3(21.5f, -9.5f, 0.0f) }; // left and right side respectively
     Vector3 lerpDestination;
     public Tilemap tilemap;
+    Vector3[] powerPellets = { new Vector3(-4.5f, 1.5f, 0.0f), new Vector3(20.5f, 1.5f, 0.0f), new Vector3(-4.5f, 20.5f, 0.0f), new Vector3(20.5f, -20.5f, 0.0f) }; // can potentially add this in nonWalkableTiles method where = 4
 
     // use PacStudentScore as a property so it can be accessed by UIManager (and SaveGameManager in future)
     private static int pacStudentScore = 0;
     public static int PacStudentScore
     {
         get { return pacStudentScore; }
+    }
+
+    private static int ghostTimer = 10;
+    public static int GhostTimer
+    {
+        get { return ghostTimer; }
     }
 
     float originalXPos;
@@ -53,8 +67,13 @@ public class PacStudentController : MonoBehaviour
     void Start()
     {
         tweener = gameObject.GetComponent<Tweener>();
+
         audioSource = GameObject.Find("Footsteps Sound Effect").GetComponent<AudioSource>();
         audioSource1 = GameObject.Find("Pellet Eating Sound Effect").GetComponent<AudioSource>();
+        audioSource2 = GameObject.Find("Wall Collision Sound Effect").GetComponent<AudioSource>();
+        audioSource3 = GameObject.Find("Normal State Background Music").GetComponent<AudioSource>();
+        audioSource4 = GameObject.Find("Scared State Background Music").GetComponent<AudioSource>();
+
         item.transform.position = new Vector3(-4.5f, 3.5f, 0.0f); // teleport PacStudent to left corner grid position if not there already
         item.GetComponent<SpriteRenderer>().flipX = true; // face away from the wall
         walkableTiles = new List<Vector3>();
@@ -102,18 +121,78 @@ public class PacStudentController : MonoBehaviour
         // slight lag when teleporting
         if (yPos == -9.5f) // if along the tunnel where the teleporters are
         {
-            Debug.Log("I am in a tunnel");
             if (xPos == teleporters[0].x && currentInput == KeyCode.A) // left teleporter
             {
-                Debug.Log("I am in the left teleporter");
                 item.transform.position = teleporters[1]; // teleport to right entry
                 checkCurrentInput(teleporters[1].x, -9.5f);
             }
             if (xPos == teleporters[1].x && currentInput == KeyCode.D) // right teleporter
             {
-                Debug.Log("I am in the right teleporter");
                 item.transform.position = teleporters[0];
                 checkCurrentInput(teleporters[0].x, -9.5f);
+            }
+        }
+
+        /* Check Power Pellets */
+        for (int i = 0; i < powerPellets.Length; i++)
+        {
+            if (lerpDestination == powerPellets[i])
+            {
+                audioSource3.Stop();
+                if (!audioSource4.isPlaying)
+                {
+                    audioSource4.Play();
+                }
+
+                if (ghostTimer == 3)
+                {
+                    // Recovery state
+                }
+                //if (ghostTimer == )
+
+                if (!ghostAnimator1.GetCurrentAnimatorStateInfo(0).IsName("Scared"))
+                {
+                    ghostAnimator1.Play("Scared", 0);
+                }
+                if (!ghostAnimator2.GetCurrentAnimatorStateInfo(0).IsName("Scared"))
+                {
+                    ghostAnimator2.Play("Scared", 0);
+                }
+                if (!ghostAnimator3.GetCurrentAnimatorStateInfo(0).IsName("Scared"))
+                {
+                    ghostAnimator3.Play("Scared", 0);
+                }
+                if (!ghostAnimator4.GetCurrentAnimatorStateInfo(0).IsName("Scared"))
+                {
+                    ghostAnimator4.Play("Scared", 0);
+                }
+                // updating the score here was glitching it out -- conditional was true for a long time
+                if (powerPellets[i].x == -4.5f)
+                {
+                    if (powerPellets[i].y == 1.5f)
+                    {
+                        Destroy(GameObject.FindGameObjectWithTag("PelletOne"));
+                        break;
+                    }
+                    else
+                    {
+                        Destroy(GameObject.FindGameObjectWithTag("PelletThree"));
+                        break;
+                    }
+                }
+                if (powerPellets[i].x == 20.5f)
+                {
+                    if (powerPellets[i].y == 1.5f)
+                    {
+                        Destroy(GameObject.FindGameObjectWithTag("PelletTwo"));
+                        break;
+                    }
+                    else
+                    {
+                        Destroy(GameObject.FindGameObjectWithTag("PelletFour"));
+                        break;
+                    }
+                }
             }
         }
 
@@ -352,19 +431,47 @@ public class PacStudentController : MonoBehaviour
             checkTile(lerpDestination);
 
             animator.Play("IdleAnim", 0);
-            wallParticleEffect.Play();
             return false;
         }
     }
 
     public void updateAudio(float xPos, float yPos)
     {
-        if (!checkCurrentInput(xPos, yPos))
+        if (!checkCurrentInput(xPos, yPos)) // if not lerping
         {
+            audioSource.Stop();
             audioSource1.Stop();
-        } else if (!audioSource1.isPlaying)
+            if (!audioSource2.isPlaying)
+            {
+                audioSource2.Play(); // problem is that its repeating -- this should only play once
+                wallParticleEffect.Play();
+            }
+        }
+
+        /*if (checkTile(lerpDestination))
         {
-            audioSource1.Play();
+            if (!audioSource1.isPlaying)
+            {
+                audioSource.Stop();
+                audioSource1.Play();
+            }
+        }
+
+        if (!checkTile(lerpDestination))
+        {
+            if (!audioSource.isPlaying)
+            {
+                audioSource1.Stop();
+                audioSource.Play();
+            }
+        }*/
+
+        if (!audioSource4.isPlaying)
+        {
+            if (!audioSource3.isPlaying)
+            {
+                audioSource3.Play();
+            }
         }
     }
 
@@ -409,20 +516,28 @@ public class PacStudentController : MonoBehaviour
         }
     }
 
-    public void checkTile(Vector3 lerpDestination)
+    public bool checkTile(Vector3 lerpDestination) // returns true if pellet is destroyed
     {
-        //int xPos = (int)Mathf.Ceil(lerpDestination.x);
-        //int yPos = (int)Mathf.Ceil(lerpDestination.y);
-        //Vector3Int lerpTile = new Vector3Int(xPos, yPos, 0);
         Vector3Int lerpTile = tilemap.WorldToCell(lerpDestination);
         if (tilemap.GetTile(lerpTile) == null)
         {
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
             // play footsteps audio instead of pellet eating audio
+            return false;
         }
         else
         {
             tilemap.SetTile(lerpTile, null); // destroy the tile
+            audioSource.Stop();
+            if (!audioSource1.isPlaying)
+            {
+                audioSource1.Play();
+            }
             pacStudentScore += 10; // add 10 to the score
+            return true;
         }
     }
 }

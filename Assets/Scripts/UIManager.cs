@@ -30,9 +30,9 @@ public class UIManager : MonoBehaviour
         /* GAME TIMER */
         timer += Time.deltaTime; // this is in seconds
         int milliTimer = (int)(timer * 1000.0f); // total milliseconds
-        minutes = (int)Mathf.Ceil(milliTimer / 60000); // how many minutes = total milliseconds / 60000
+        minutes = milliTimer / 60000; // how many minutes = total milliseconds / 60000
         seconds = (int)timer - (minutes * 60);
-        milliseconds = milliTimer - (minutes * 60000) - (seconds * 1000);
+        milliseconds = (milliTimer - (minutes * 60000) - (seconds * 1000)) / 10;
 
         if (SceneManager.GetActiveScene().buildIndex == 0) // if Level1Scene is the active scene
         {
