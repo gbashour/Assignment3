@@ -96,160 +96,168 @@ public class PacStudentController : MonoBehaviour
         //Debug.Log(item.transform.position);
         // BUG FOUND: if user inputs a new key before halfway through lerp, it rounds down (Mathf.Round() rounds down if 0.1 - 0.5, up for 0.6 +)
         // FIX: add a conditional to ensure always rounds up to grid position of next lerp -- always round to the position that PacStudent WILL be in
-
-        float x = item.transform.position.x + 0.5f;
-        float y = item.transform.position.y + 0.5f;
-        float xPos = Mathf.Round(x) - 0.5f;
-        float yPos = Mathf.Round(y) - 0.5f;
-        // Error: invalid input before mid-lerp where it would be valid in the previous grid position is being allowed -- fix below:
-        /* if less than halfway through lerp */
-        if (originalXPos - xPos < 0.5f)
+        if (UIManager.RoundStart)
         {
-            if (currentInput != KeyCode.A) // fix for moving in the positive direction
+            float x = item.transform.position.x + 0.5f;
+            float y = item.transform.position.y + 0.5f;
+            float xPos = Mathf.Round(x) - 0.5f;
+            float yPos = Mathf.Round(y) - 0.5f;
+            // Error: invalid input before mid-lerp where it would be valid in the previous grid position is being allowed -- fix below:
+            /* if less than halfway through lerp */
+            if (originalXPos - xPos < 0.5f)
             {
-                xPos = Mathf.Ceil(x) - 0.5f;
-            } else
-            {
-                xPos = Mathf.Floor(x) - 0.5f;
+                if (currentInput != KeyCode.A) // fix for moving in the positive direction
+                {
+                    xPos = Mathf.Ceil(x) - 0.5f;
+                }
+                else
+                {
+                    xPos = Mathf.Floor(x) - 0.5f;
+                }
             }
-        }
-        if (originalYPos - yPos < 0.5f)
-        {
-            if (currentInput != KeyCode.S)
+            if (originalYPos - yPos < 0.5f)
             {
-                yPos = Mathf.Ceil(y) - 0.5f;
-            } else
-            {
-                yPos = Mathf.Floor(y) - 0.5f;
+                if (currentInput != KeyCode.S)
+                {
+                    yPos = Mathf.Ceil(y) - 0.5f;
+                }
+                else
+                {
+                    yPos = Mathf.Floor(y) - 0.5f;
+                }
             }
-        }
-        // slight lag when teleporting
-        if (yPos == -9.5f) // if along the tunnel where the teleporters are
-        {
-            if (xPos == teleporters[0].x && currentInput == KeyCode.A) // left teleporter
+            // slight lag when teleporting
+            if (yPos == -9.5f) // if along the tunnel where the teleporters are
             {
-                item.transform.position = teleporters[1]; // teleport to right entry
-                checkCurrentInput(teleporters[1].x, -9.5f);
-            }
-            if (xPos == teleporters[1].x && currentInput == KeyCode.D) // right teleporter
-            {
-                item.transform.position = teleporters[0];
-                checkCurrentInput(teleporters[0].x, -9.5f);
-            }
-        }
-
-        pelletsAndGhosts();
-
-        updateAudio(xPos, yPos);
-        updateAnimation();
-
-        if (checkCurrentInput(xPos, yPos) && !particleEffect.isPlaying)
-        {
-            particleEffect.Play();
-        } else if (!checkCurrentInput(xPos, yPos))
-        {
-            particleEffect.Clear();
-            particleEffect.Stop();
-        }
-
-        if (Input.GetKeyDown(KeyCode.W)) // Move PacStudent Up
-        {
-            lastInput = KeyCode.W;
-            originalXPos = item.transform.position.x;
-            originalYPos = item.transform.position.y;
-            if (isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
-            {
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f);
-                lerpDestination = new Vector3(xPos, yPos, 0.0f);
-                checkTile(lerpDestination);
-                currentInput = KeyCode.W;
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.A)) // Move PacStudent Left
-        {
-            lastInput = KeyCode.A;
-            originalXPos = item.transform.position.x;
-            originalYPos = item.transform.position.y;
-            if (isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
-            {
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
-                lerpDestination = new Vector3(xPos, yPos, 0.0f);
-                checkTile(lerpDestination);
-                currentInput = KeyCode.A;
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.S)) // Move PacStudent Down
-        {
-            lastInput = KeyCode.S;
-            originalXPos = item.transform.position.x;
-            originalYPos = item.transform.position.y;
-            if (isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f)))
-            {
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
-                lerpDestination = new Vector3(xPos, yPos, 0.0f);
-                checkTile(lerpDestination);
-                currentInput = KeyCode.S;
-            }
-        }
-        if (Input.GetKeyDown(KeyCode.D)) // Move PacStudent Right
-        {
-            lastInput = KeyCode.D;
-            originalXPos = item.transform.position.x;
-            originalYPos = item.transform.position.y;
-            if (isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
-            {
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
-                lerpDestination = new Vector3(xPos, yPos, 0.0f);
-                checkTile(lerpDestination);
-                currentInput = KeyCode.D;
-            }
-        }
-
-        if (xPos % 0.5f == 0.0f || yPos % 0.5f == 0.0f) // if PacStudent is not lerping
-        {
-            if (lastInput == KeyCode.W && isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
-            {
-                currentInput = lastInput;
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f);
-                lerpDestination = new Vector3(xPos, yPos, 0.0f);
-                checkTile(lerpDestination);
-            }
-            else
-            {
-                checkCurrentInput(xPos, yPos);
+                if (xPos == teleporters[0].x && currentInput == KeyCode.A) // left teleporter
+                {
+                    item.transform.position = teleporters[1]; // teleport to right entry
+                    checkCurrentInput(teleporters[1].x, -9.5f);
+                }
+                if (xPos == teleporters[1].x && currentInput == KeyCode.D) // right teleporter
+                {
+                    item.transform.position = teleporters[0];
+                    checkCurrentInput(teleporters[0].x, -9.5f);
+                }
             }
 
-            if (lastInput == KeyCode.A && isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
+            pelletsAndGhosts();
+
+            updateAudio(xPos, yPos);
+            updateAnimation();
+
+            if (checkCurrentInput(xPos, yPos) && !particleEffect.isPlaying)
             {
-                currentInput = lastInput;
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
-                lerpDestination = new Vector3(xPos, yPos, 0.0f);
-                checkTile(lerpDestination);
-            } else
+                particleEffect.Play();
+            }
+            else if (!checkCurrentInput(xPos, yPos))
             {
-                checkCurrentInput(xPos, yPos);
+                particleEffect.Clear();
+                particleEffect.Stop();
             }
 
-            if (lastInput == KeyCode.S && isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f))) // entering this if statement when it shouldnt be
+            if (Input.GetKeyDown(KeyCode.W)) // Move PacStudent Up
             {
-                currentInput = lastInput;
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
-                lerpDestination = new Vector3(xPos, yPos, 0.0f);
-                checkTile(lerpDestination);
-            } else
+                lastInput = KeyCode.W;
+                originalXPos = item.transform.position.x;
+                originalYPos = item.transform.position.y;
+                if (isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
+                {
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f);
+                    lerpDestination = new Vector3(xPos, yPos, 0.0f);
+                    checkTile(lerpDestination);
+                    currentInput = KeyCode.W;
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.A)) // Move PacStudent Left
             {
-                checkCurrentInput(xPos, yPos);
+                lastInput = KeyCode.A;
+                originalXPos = item.transform.position.x;
+                originalYPos = item.transform.position.y;
+                if (isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
+                {
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
+                    lerpDestination = new Vector3(xPos, yPos, 0.0f);
+                    checkTile(lerpDestination);
+                    currentInput = KeyCode.A;
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.S)) // Move PacStudent Down
+            {
+                lastInput = KeyCode.S;
+                originalXPos = item.transform.position.x;
+                originalYPos = item.transform.position.y;
+                if (isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f)))
+                {
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
+                    lerpDestination = new Vector3(xPos, yPos, 0.0f);
+                    checkTile(lerpDestination);
+                    currentInput = KeyCode.S;
+                }
+            }
+            if (Input.GetKeyDown(KeyCode.D)) // Move PacStudent Right
+            {
+                lastInput = KeyCode.D;
+                originalXPos = item.transform.position.x;
+                originalYPos = item.transform.position.y;
+                if (isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
+                {
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
+                    lerpDestination = new Vector3(xPos, yPos, 0.0f);
+                    checkTile(lerpDestination);
+                    currentInput = KeyCode.D;
+                }
             }
 
-            if (lastInput == KeyCode.D && isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
+            if (xPos % 0.5f == 0.0f || yPos % 0.5f == 0.0f) // if PacStudent is not lerping
             {
-                currentInput = lastInput;
-                tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
-                lerpDestination = new Vector3(xPos, yPos, 0.0f);
-                checkTile(lerpDestination);
-            } else
-            {
-                checkCurrentInput(xPos, yPos);
+                if (lastInput == KeyCode.W && isWalkable(new Vector3(xPos, yPos + 1.0f, 0.0f)))
+                {
+                    currentInput = lastInput;
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos + 1.0f, 0.0f), 1.0f);
+                    lerpDestination = new Vector3(xPos, yPos, 0.0f);
+                    checkTile(lerpDestination);
+                }
+                else
+                {
+                    checkCurrentInput(xPos, yPos);
+                }
+
+                if (lastInput == KeyCode.A && isWalkable(new Vector3(xPos - 1.0f, yPos, 0.0f)))
+                {
+                    currentInput = lastInput;
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos - 1.0f, yPos, 0.0f), 1.0f);
+                    lerpDestination = new Vector3(xPos, yPos, 0.0f);
+                    checkTile(lerpDestination);
+                }
+                else
+                {
+                    checkCurrentInput(xPos, yPos);
+                }
+
+                if (lastInput == KeyCode.S && isWalkable(new Vector3(xPos, yPos - 1.0f, 0.0f))) // entering this if statement when it shouldnt be
+                {
+                    currentInput = lastInput;
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos, yPos - 1.0f, 0.0f), 1.0f);
+                    lerpDestination = new Vector3(xPos, yPos, 0.0f);
+                    checkTile(lerpDestination);
+                }
+                else
+                {
+                    checkCurrentInput(xPos, yPos);
+                }
+
+                if (lastInput == KeyCode.D && isWalkable(new Vector3(xPos + 1.0f, yPos, 0.0f)))
+                {
+                    currentInput = lastInput;
+                    tweener.AddTween(item.transform, item.transform.position, new Vector3(xPos + 1.0f, yPos, 0.0f), 1.0f);
+                    lerpDestination = new Vector3(xPos, yPos, 0.0f);
+                    checkTile(lerpDestination);
+                }
+                else
+                {
+                    checkCurrentInput(xPos, yPos);
+                }
             }
         }
     }

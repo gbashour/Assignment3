@@ -38,16 +38,19 @@ public class CherryController : MonoBehaviour
         height = 2.0f * cameraView.orthographicSize;
         width = height * cameraView.aspect;
 
-        timer += Time.deltaTime;
-        if ((int)timer % 10 == 0 && (int)timer > 1) // if timer is divisble by 10
+        if (UIManager.RoundStart)
         {
-            spawnPeach();
-            timer = 0; // reset timer to fix duplication bug (float keeps rounding down to 10)
+            timer += Time.deltaTime;
+            if ((int)timer % 10 == 0 && (int)timer > 1) // if timer is divisble by 10
+            {
+                spawnPeach();
+                timer = 0; // reset timer to fix duplication bug (float keeps rounding down to 10)
+            }
+            // When cherry reaches the other side of the level
+            // destroy it -- Destroy or deactivate object
+            finalLerp();
+            edgeCheck();
         }
-        // When cherry reaches the other side of the level
-        // destroy it -- Destroy or deactivate object
-        finalLerp();
-        edgeCheck();
     }
 
     public void spawnPeach()
